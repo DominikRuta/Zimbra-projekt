@@ -1,0 +1,14 @@
+{% from "macros/fields.tmpl" import render_input_field, render_password_field,
+                                    render_submit %}
+{% extends "shared/layout.tmpl" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+  <h3>List all Account</h3>
+ <table>
+    {% for n in data %}
+      <tr><td>{{ n[0] }}</td><td>{{ n[1] }}</td><td>{{ n[2] }}</td><td><a href="/zimbradeleteuser/{{ n[0] }}">Smazat</a></td></tr>
+    {% endfor %}
+    </table>
+{% endblock %}

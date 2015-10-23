@@ -1,0 +1,14 @@
+{% from "macros/fields.tmpl" import render_input_field, render_password_field,
+                                    render_submit %}
+{% extends "shared/layout.tmpl" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+  <h3>Show account</h3>
+ <table>
+    {% for n in data %}
+        <tr><td>{{ n }}</td></tr>
+    {% endfor %}
+    </table>
+{% endblock %}
