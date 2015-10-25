@@ -5,11 +5,11 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-  <h3>List of all accouts</h3>
+  <h3>List of all domains</h3>
  <table >
-      <tr><th>ID</th><th>Name</th><th>Password</th><th>Action</th></tr>
+      <tr><th>ID</th><th>Name</th><th>Action</th></tr>
     {% for n in data %}
-      <tr ><td>{{ n[0] }}</td><td style="padding: 10px">{{ n[1] }}</td><td>{{ n[2] }}</td><td><a href="/zimbradeleteuser/{{ n[0] }}">Smazat</a></td></tr>
+      <tr ><td>{{ n[0] }}</td><td style="padding: 10px">{{ n[1] }}</td><td>Smazat</td></tr>
     {% endfor %}
     </table>
 {% endblock %}

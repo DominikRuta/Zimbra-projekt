@@ -2,7 +2,7 @@ from flask import (Blueprint, escape, flash, render_template,
                    redirect, request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
 
-from .forms import ResetPasswordForm, EmailForm, LoginForm, RegistrationForm,NewUserForm, DelUserForm
+from .forms import ResetPasswordForm, EmailForm, LoginForm, RegistrationForm,NewUserForm, DelUserForm, DomainForm
 from ..data.database import db
 from ..data.models import User, UserPasswordToken
 from ..data.util import generate_random_token
@@ -136,6 +136,26 @@ def adduserzimbra():
             flash("Account " + form.email.data +" created", "info")
             return redirect(url_for('public.index'))
     return render_template("auth/zimbraaccountadd.tmpl", form=form)
+
+###
+@login_required
+@blueprint.route('/zimbraadddomain', methods=['GET', 'POST'])
+def adddomianzimbra():
+    form = DomainForm()
+    if form.validate_on_submit():
+        if zm.createDomain(name=form.domainname.data ):
+            flash("Domain " + form.domainname.data +" created", "info")
+            return redirect(url_for('public.index'))
+    return render_template("auth/zimbranewdomain.tmpl", form=form)
+###
+
+@login_required
+@blueprint.route('/zimbradomainslist', methods=['GET', 'POST'])
+def listdomainszimbra():
+
+    r = zm.getAllDomain()
+    return render_template("auth/zimbralistdomians.tmpl", data=r)
+###
 
 @login_required
 @blueprint.route('/zimbradeleteuser/<id>', methods=['GET', 'POST'])

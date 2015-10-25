@@ -1,0 +1,14 @@
+{% from "macros/fields.tmpl" import render_input_field, render_password_field,
+                                    render_submit %}
+{% extends "shared/layout.tmpl" %}
+
+{% block title %}New Domain{% endblock %}
+
+{% block content %}
+  <h3>New Domain</h3>
+  <form method="POST" id="domain-form">
+    {{ form.hidden_tag() }}
+    {{ render_input_field(form.domainname) }}
+    {{ render_submit() }}
+  </form>
+{% endblock %}

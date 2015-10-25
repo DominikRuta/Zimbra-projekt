@@ -99,3 +99,14 @@ class DelUserForm(Form):
         #Email(message="Please enter a valid email address"),
         InputRequired(message="You can't leave this empty")
     ])
+
+###
+class DomainForm(Form):
+    domainname = TextField('Choose your name for domain', validators=[
+        Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
+        Predicate(username_is_available,
+                  message="A domain has already been registered with that name. Try another?"),
+        Length(min=6, max=30, message="Please use between 6 and 30 characters"),
+        InputRequired(message="You can't leave this empty")
+    ])
+###
