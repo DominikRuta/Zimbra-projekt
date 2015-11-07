@@ -6,9 +6,11 @@
 
 {% block content %}
   <h3>Show account</h3>
- <table>
-    {% for n in data %}
-        <tr><td>{{ n }}</td></tr>
-    {% endfor %}
-    </table>
+        <form method="POST" id="register-form">
+    {{ form.hidden_tag() }}
+    {{ render_input_field(form.email,value=name) }}
+    {{ render_password_field(form.password) }}
+    {{ render_input_field(form.displayname) }}
+    {{ render_submit() }}
+  </form>
 {% endblock %}

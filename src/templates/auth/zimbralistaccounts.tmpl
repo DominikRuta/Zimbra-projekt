@@ -7,9 +7,9 @@
 {% block content %}
   <h3>List of all accouts</h3>
  <table >
-      <tr><th>ID</th><th>Name</th><th>Password</th><th>Action</th></tr>
+      <tr><th>Account</th><th></th><th>Action</th></tr>
     {% for n in data %}
-      <tr ><td>{{ n[0] }}</td><td style="padding: 10px">{{ n[1] }}</td><td>{{ n[2] }}</td><td><a href="/zimbradeleteuser/{{ n[0] }}">Smazat</a></td></tr>
+            <tr><td style="padding: 10px">{{ n[1] }}</td><td>{{ n[2] }}</td><td><a href="{{url_for('auth.edituserzimbra', id=n[0])}}">Editovat</a></td><td><a href="{{url_for('auth.deleteuserzimbra', id=n[0])}}">Smazat</a></td></tr>
     {% endfor %}
     </table>
 {% endblock %}

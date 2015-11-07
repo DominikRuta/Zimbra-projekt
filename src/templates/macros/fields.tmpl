@@ -45,8 +45,8 @@ a paragraph with any field-related errors beneath the field's control.
   </div>
 {% endmacro %}
 
-{% macro render_input_field(field) %}
-  {% with value = field.data if field.data is not none else "" %}
+{% macro render_input_field(field,value) %}
+  {% with value = field.data if field.data is not none else value %}
     <div class="form-group">
       {{ render_input(field.name, value, field.label, errors=field.errors, **kwargs) }}
     </div>

@@ -93,6 +93,25 @@ class NewUserForm(Form):
         InputRequired(message="You can't leave this empty")
     ])
 
+class EditUserForm(Form):
+    email = TextField('Your new email address', validators=[
+        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
+        Email(message="Please enter a valid email address"),
+        InputRequired(message="You can't leave this empty")
+    ])
+    displayname = TextField('Prefered Display Name', validators=[
+        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
+        #Email(message="Please enter a valid email address"),
+        InputRequired(message="You can't leave this empty")
+    ])
+    password = PasswordField('New password', validators=[
+#        EqualTo('confirm', message='Passwords must match'),
+        Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
+        Length(min=6, max=30, message="Please use between 6 and 30 characters"),
+        InputRequired(message="You can't leave this empty")
+    ])
+
+
 class DelUserForm(Form):
     email = TextField('Email address you want delete.', validators=[
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),

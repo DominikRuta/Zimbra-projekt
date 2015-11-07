@@ -2,7 +2,8 @@ from flask import (Blueprint, escape, flash, render_template,
                    redirect, request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
 
-from .forms import ResetPasswordForm, EmailForm, LoginForm, RegistrationForm,NewUserForm, DelUserForm, DomainForm
+from .forms import ResetPasswordForm, EmailForm, LoginForm, RegistrationForm,NewUserForm, DelUserForm, DomainForm, \
+    EditUserForm
 from ..data.database import db
 from ..data.models import User, UserPasswordToken
 from ..data.util import generate_random_token
@@ -181,8 +182,10 @@ def loginpostmaster():
     return redirect(url_for('public.index'))
 
 @login_required
-@blueprint.route('/zimbrashowuser', methods=['GET', 'POST'])
-def showuserzimbra():
-    r = zm.getAccount(name="user@test.cz")
+@blueprint.route('/zimbraedituser/<id>', methods=['GET', 'POST'])
+def edituserzimbra(id):
+    form = EditUserForm()
+    r = zm.getAccount(id=id)
+    name=r['GetAccountResponse']['account']['name']
     print r
-    return render_template("auth/zimbrashowaccount.tmpl", data=r)
+    return render_template("auth/zimbraeditaccount.tmpl", name=name, data=r['GetAccountResponse']['account']['name'], form=form)

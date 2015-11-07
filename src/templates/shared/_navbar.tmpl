@@ -20,6 +20,8 @@
           <li><a href="{{ url_for('auth.register') }}">Sign up</a></li>
 
         {% else %}
+          <li><a href="{{ url_for('auth.adduserzimbra') }}">Add user</a></li>
+          <li><a href="{{ url_for('auth.adddomianzimbra') }}">Add domain</a></li>
           <li><a href="{{ url_for('auth.listuserzimbra') }}">Users list</a></li>
           <li><a href="{{ url_for('auth.listdomainszimbra') }}">Domains list</a></li>
           <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
