@@ -2,14 +2,28 @@
                                     render_submit %}
 {% extends "shared/layout.tmpl" %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Zimbra Administration{% endblock %}
 
 {% block content %}
   <h3>List of all accouts</h3>
  <table >
-      <tr><th>Account</th><th></th><th>Action</th></tr>
-    {% for n in data %}
-            <tr><td style="padding: 10px">{{ n[1] }}</td><td>{{ n[2] }}</td><td><a href="{{url_for('auth.edituserzimbra', id=n[0])}}">Editovat</a></td><td><a href="{{url_for('auth.deleteuserzimbra', id=n[0])}}">Smazat</a></td></tr>
-    {% endfor %}
+      <tr><th>Ucet</th><th>Jmeno</th><th>Action</th></tr>
+        <p><a href="{{ url_for('auth.adduserzimbra') }}">Create user</a></p>
+        {% for n in data %}
+            {% if (n[1].split("@")[1] == current_user.email.split("@")[1] or current_user.email.split("@")[1] == "sspu-opava.local") %}
+                    <tr>
+                        <td style="padding: 10px">{{ n[1] }}</td>
+                        <td>{{ n[2] }}</td>
+
+                        {% if not (n[1].split("@")[0] == "galsync" or (n[1].split("@")[0] != "admin" and n[1].split("@")[1] == "sspu-opava.local")) %}
+                        <td><a href="{{url_for('auth.edituserzimbra', id=n[0])}}">Editovat</a></td>
+                        {% endif %}
+
+                        {% if not (n[1].split("@")[0] == "postmaster" or n[1].split("@")[0] == "galsync" or n[1].split("@")[1] == "sspu-opava.local") %}
+                        <td><a href="{{url_for('auth.deleteuserzimbra', id=n[0])}}">Smazat</a></td>
+                        {% endif %}
+                    </tr>
+            {% endif %}
+        {% endfor %}
     </table>
 {% endblock %}

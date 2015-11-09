@@ -20,11 +20,12 @@
           <li><a href="{{ url_for('auth.register') }}">Sign up</a></li>
 
         {% else %}
-          <li><a href="{{ url_for('auth.adduserzimbra') }}">Add user</a></li>
-          <li><a href="{{ url_for('auth.adddomianzimbra') }}">Add domain</a></li>
-          <li><a href="{{ url_for('auth.listuserzimbra') }}">Users list</a></li>
-          <li><a href="{{ url_for('auth.listdomainszimbra') }}">Domains list</a></li>
-          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+              <li><a href="{{ url_for('auth.listuserzimbra') }}">Users list</a></li>
+            {% if current_user.email.split("@")[1] == "sspu-opava.local" %}
+              <li><a href="{{ url_for('auth.listdomainszimbra') }}">Domains list</a></li>
+            {% endif %}
+              <li><a href="">Logged user: {{ current_user.email }}</a></li>
+              <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
         {% endif %}
       </ul>
     </div>

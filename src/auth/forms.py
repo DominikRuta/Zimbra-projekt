@@ -104,6 +104,7 @@ class EditUserForm(Form):
         #Email(message="Please enter a valid email address"),
         InputRequired(message="You can't leave this empty")
     ])
+
     password = PasswordField('New password', validators=[
 #        EqualTo('confirm', message='Passwords must match'),
         Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
@@ -119,13 +120,22 @@ class DelUserForm(Form):
         InputRequired(message="You can't leave this empty")
     ])
 
+
+class NewAliasForm(Form):
+        alias = TextField('Enter a new alias', validators=[
+        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
+        #Email(message="Please enter a valid email address"),
+        InputRequired(message="You can't leave this empty")
+    ])
+
+
 ###
 class DomainForm(Form):
     domainname = TextField('Choose your name for domain', validators=[
-        Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
+        #Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
         Predicate(username_is_available,
                   message="A domain has already been registered with that name. Try another?"),
-        Length(min=6, max=30, message="Please use between 6 and 30 characters"),
+        Length(min=3, max=30, message="Please use between 6 and 30 characters"),
         InputRequired(message="You can't leave this empty")
     ])
 ###

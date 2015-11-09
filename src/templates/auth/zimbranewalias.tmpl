@@ -2,15 +2,13 @@
                                     render_submit %}
 {% extends "shared/layout.tmpl" %}
 
-{% block title %}Edit account{% endblock %}
+{% block title %}New alias{% endblock %}
 
 {% block content %}
-  <h3>Edit account</h3>
-        <form method="POST" id="register-form">
+  <h3>New Alias</h3>
+  <form method="POST" id="domain-form">
     {{ form.hidden_tag() }}
-    {{ render_input_field(form.email,value=name) }}
-    {{ render_input_field(form.displayname, value=displayname) }}
+    {{ render_input_field(form.alias) }}
     {{ render_submit() }}
   </form>
 {% endblock %}
-

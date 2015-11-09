@@ -181,13 +181,13 @@ class ZimbraManager:
 
     def addAccountAlias(self,*args,**kwargs):
 
-        accountinfo = self.getAccount(*args, **kwargs)
-        if 'GetAccountResponse' in accountinfo:
+        #accountinfo = self.getAccount(*args, **kwargs)
+        #if 'GetAccountResponse' in accountinfo:
 
             response = self.request(
                 'AddAccountAliasRequest',
                 {
-                    "id": accountinfo['GetAccountResponse']['account']['id'],
+                    "id": kwargs.get('id'), #accountinfo['GetAccountResponse']['account']['id'],
                      "alias": kwargs.get('alias')
                 },
                 "urn:zimbraAdmin"
@@ -195,9 +195,9 @@ class ZimbraManager:
 
             if 'AddAccountAliasResponse' in response:
                 return True
-            return response 
-        else:
-            return accountinfo
+            return response
+        #else:
+        #    return accountinfo
 
 
     def removeAccountAlias(self,*args,**kwargs):
@@ -238,8 +238,8 @@ class ZimbraManager:
             'GetDomainRequest',
             {
                 "domain": {
-                    'by': 'name',
-                    '_content': kwargs.get('name')
+                    'by': 'id',
+                    '_content': kwargs.get('id')
                 },
             },
             "urn:zimbraAdmin"
@@ -277,6 +277,18 @@ class ZimbraManager:
         else:
             return response
 
+    #def getQuotaUsage(self, *args, **kwargs):
+     #       response = self.request(
+     #           'GetQuotaUsageRequest',
+     #           {
+     #                   'domain': 'mail',
+     #           },
+     #           "urn:zimbraAdmin"
+     #       )
+     #       if 'GetQuotaUsageResponse' in response:
+     #           return [ (i['name'],i['used']) for i in response['GetQuotaUsageResponse']['account'] ]
+     #       else:
+     #           return response
 
 #zm=ZimbraManager(url=app_config.ZIMBRA_URL,admin=app_config.ZIMBRA_ADMIN,password=app_config.ZIMBRA_ADMIN_PASSWORD)
 zm=ZimbraManager(url="https://192.168.22.110:7071/service/admin/soap",admin="admin",password="Zimbra2015")
