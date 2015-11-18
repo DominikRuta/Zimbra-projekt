@@ -13,7 +13,7 @@ class User(CRUDModel, UserMixin):
 
     id = Column(Integer, primary_key=True)
     activate_token = Column(String, nullable=False, doc="Activation token for email verification")
-    email = Column(String(64), nullable=False, unique=False, index=True, doc="The user's email address.")
+    email = Column(String(64), nullable=False, unique=True, index=True, doc="The user's email address.")
     password_hash = Column(String(128))
     username = Column(String(64), nullable=False, unique=False, index=True, doc="The user's username.")
     verified = Column(Boolean(name="verified"), nullable=False, default=False)

@@ -1,0 +1,14 @@
+{% from "macros/fields.tmpl" import render_input_field, render_password_field,
+                                    render_submit %}
+{% extends "shared/layout.tmpl" %}
+
+{% block title %}New alias{% endblock %}
+
+{% block content %}
+  <h3>New Alias</h3>
+  <form method="POST" id="domain-form">
+    {{ form.hidden_tag() }}
+    {{ render_input_field(form.alias) }}
+    {{ render_submit() }}
+  </form>
+{% endblock %}

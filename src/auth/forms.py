@@ -78,7 +78,7 @@ class RegistrationForm(Form):
 class NewUserForm(Form):
     email = TextField('Your new email address', validators=[
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
-        Email(message="Please enter a valid email address"),
+        #Email(message="Please enter a valid email address"),
         InputRequired(message="You can't leave this empty")
     ])
     displayname = TextField('Prefered Display Name', validators=[
@@ -96,13 +96,13 @@ class NewUserForm(Form):
 class EditUserForm(Form):
     email = TextField('Your new email address', validators=[
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
-        Email(message="Please enter a valid email address"),
-        InputRequired(message="You can't leave this empty")
+        #Email(message="Please enter a valid email address"),
+        #InputRequired(message="You can't leave this empty")
     ])
     displayname = TextField('Prefered Display Name', validators=[
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
         #Email(message="Please enter a valid email address"),
-        InputRequired(message="You can't leave this empty")
+        #InputRequired(message="You can't leave this empty")
     ])
 
     password = PasswordField('New password', validators=[
@@ -123,6 +123,13 @@ class DelUserForm(Form):
 
 class NewAliasForm(Form):
         alias = TextField('Enter a new alias', validators=[
+        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
+        #Email(message="Please enter a valid email address"),
+        InputRequired(message="You can't leave this empty")
+    ])
+
+class RemoveAliasForm(Form):
+        alias = TextField('Enter alias to remove', validators=[
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
         #Email(message="Please enter a valid email address"),
         InputRequired(message="You can't leave this empty")

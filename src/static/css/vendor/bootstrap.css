@@ -68,6 +68,7 @@ h1 {
   font-size: 2em;
   margin: 0.67em 0;
 }
+
 mark {
   background: #ff0;
   color: #000;
@@ -187,7 +188,7 @@ table {
 }
 td,
 th {
-  padding: 0;
+  padding: 10px;
 }
 @media print {
   * {
@@ -6372,4 +6373,19 @@ input:focus {
 .well {
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+
+.header_pages {
+  color: red;
+  text-align: center;
+}
+
+.side_menu {
+  width: 15%;
+  float: left
+}
+
+.main_content {
+  width: 85%;
+  float: right
 }

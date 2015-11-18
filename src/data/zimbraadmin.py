@@ -4,6 +4,7 @@ from pythonzimbra.tools import auth
 from pythonzimbra.request_xml import RequestXml
 from pythonzimbra.response_xml import ResponseXml
 from pythonzimbra.communication import Communication
+from flask_login import current_user
 from pythonzimbra.response_json import ResponseJson
 from pythonzimbra.request_json import RequestJson
 #import argparse
@@ -107,22 +108,21 @@ class ZimbraManager:
         return response
 
     def setPassword(self, *args, **kwargs):
-        accountinfo = self.getAccount(*args, **kwargs)
-        if 'GetAccountResponse' in accountinfo:
+        #accountinfo = self.getAccount(*args, **kwargs)
+        #if 'GetAccountResponse' in accountinfo:
             response = self.request(
                 'SetPasswordRequest',
                 {
-                    "id": accountinfo['GetAccountResponse']['account']['id'],
+                    "id": kwargs.get('id'), #accountinfo['GetAccountResponse']['account']['id'],
                     "newPassword": kwargs.get('password')
                 },
                 "urn:zimbraAdmin"
             )
             if 'SetPasswordResponse' in response:
                 return True
-            else:
-                return response
-        else:
-            return accountinfo
+            return response
+        #else:
+         #   return accountinfo
 
 
     def getAllAccount(self, *args, **kwargs):
@@ -181,13 +181,11 @@ class ZimbraManager:
 
     def addAccountAlias(self,*args,**kwargs):
 
-        #accountinfo = self.getAccount(*args, **kwargs)
-        #if 'GetAccountResponse' in accountinfo:
 
             response = self.request(
                 'AddAccountAliasRequest',
                 {
-                    "id": kwargs.get('id'), #accountinfo['GetAccountResponse']['account']['id'],
+                    "id": kwargs.get('id'),
                      "alias": kwargs.get('alias')
                 },
                 "urn:zimbraAdmin"
@@ -196,8 +194,6 @@ class ZimbraManager:
             if 'AddAccountAliasResponse' in response:
                 return True
             return response
-        #else:
-        #    return accountinfo
 
 
     def removeAccountAlias(self,*args,**kwargs):
@@ -277,18 +273,45 @@ class ZimbraManager:
         else:
             return response
 
-    #def getQuotaUsage(self, *args, **kwargs):
-     #       response = self.request(
-     #           'GetQuotaUsageRequest',
-     #           {
-     #                   'domain': 'mail',
-     #           },
-     #           "urn:zimbraAdmin"
-     #       )
-     #       if 'GetQuotaUsageResponse' in response:
-     #           return [ (i['name'],i['used']) for i in response['GetQuotaUsageResponse']['account'] ]
-     #       else:
-     #           return response
+    def getQuotaUsage(self, *args, **kwargs):
+        if not current_user.email.split("@")[1] == "sspu-opava.local":
+           response = self.request(
+
+               'GetQuotaUsageRequest',
+               {
+
+                       "domain": kwargs.get('domain')
+               },
+               "urn:zimbraAdmin"
+
+
+           )
+        else:
+            response = self.request(
+
+                   'GetQuotaUsageRequest',
+                   {
+
+                           "allServers": kwargs.get('allServers')
+                   },
+                   "urn:zimbraAdmin"
+
+
+            )
+        return response
+
+    def countAccount(self, *args, **kwargs):
+           response = self.request(
+               'CountAccountRequest',
+               {
+                    "domain": {
+                    'by': 'name',
+                    '_content': kwargs.get('name')
+                    }
+               },
+               "urn:zimbraAdmin"
+           )
+           return response
 
 #zm=ZimbraManager(url=app_config.ZIMBRA_URL,admin=app_config.ZIMBRA_ADMIN,password=app_config.ZIMBRA_ADMIN_PASSWORD)
 zm=ZimbraManager(url="https://192.168.22.110:7071/service/admin/soap",admin="admin",password="Zimbra2015")
