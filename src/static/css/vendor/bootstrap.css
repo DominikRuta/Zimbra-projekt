@@ -6382,10 +6382,11 @@ input:focus {
 
 .side_menu {
   width: 15%;
-  float: left
+  float: left;
 }
 
 .main_content {
-  width: 85%;
-  float: right
+  margin-left: 10px;
+  width: 80%;
+  float:left;
 }

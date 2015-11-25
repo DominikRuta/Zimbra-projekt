@@ -17,13 +17,8 @@
       <ul class="nav navbar-nav navbar-right">
         {% if current_user.is_anonymous() %}
           <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-          <li><a href="{{ url_for('auth.register') }}">Sign up</a></li>
 
         {% else %}
-              <li><a href="{{ url_for('auth.listuserzimbra') }}">Users list</a></li>
-            {% if current_user.email.split("@")[1] == "sspu-opava.local" %}
-              <li><a href="{{ url_for('auth.listdomainszimbra') }}">Domains list</a></li>
-            {% endif %}
               <li><a href="">Logged as: {{ current_user.email }}</a></li>
               <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
         {% endif %}

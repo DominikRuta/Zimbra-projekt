@@ -2,22 +2,24 @@
                                     render_submit %}
 {% extends "shared/layout.tmpl" %}
 
-{% block title %}Zimbra Administration{% endblock %}
+{% block title %}Domains list{% endblock %}
 
 {% block content %}
-  <h3>List of all domains</h3>
-    <p><a href="{{ url_for('auth.adddomianzimbra') }}">Create domain</a></p>
- <table >
-      <tr><th>ID</th><th>Name</th><th>Action</th></tr>
+    {% include "shared/side_menu.tmpl" %}
+    <h2 class="header_pages">List of all domains</h2>
+    <div class="main_content">
+        <table >
+            <tr><th>ID</th><th>Name</th><th>Action</th></tr>
 
-    {% for n in data %}
-      <tr>
-          <td>{{ n[0] }}</td>
-          <td style="padding: 10px">{{ n[1] }}</td>
-          {% if not (n[1] == "sspu-opava.local") %}
-          <td><a href="{{url_for('auth.deletedomainzimbra', id=n[0])}}">Smazat</a></td>
-          {% endif %}
-      </tr>
-    {% endfor %}
-    </table>
+            {% for n in data %}
+              <tr>
+                  <td>{{ n[0] }}</td>
+                  <td style="padding: 10px">{{ n[1] }}</td>
+                  {% if not (n[1] == "sspu-opava.local") %}
+                  <td><a href="{{url_for('auth.deletedomainzimbra', id=n[0])}}">Smazat</a></td>
+                  {% endif %}
+              </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

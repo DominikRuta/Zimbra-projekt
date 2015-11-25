@@ -18,6 +18,7 @@
   </head>
   <body>
     {% include "shared/_navbar.tmpl" %}
+
     <div class="container">
       {% include "shared/flash.tmpl" %}
       {% block content %}
@@ -25,7 +26,9 @@
       {% endblock %}
     </div>
 
+
     {% block scripts %}
+
       {# template-specific scripts which are not included in bundle go here #}
     {% endblock %}
   </body>

@@ -5,10 +5,13 @@
 {% block title %}New alias{% endblock %}
 
 {% block content %}
-  <h3>New Alias</h3>
-  <form method="POST" id="domain-form">
-    {{ form.hidden_tag() }}
-    {{ render_input_field(form.alias) }}
-    {{ render_submit() }}
-  </form>
+     {% include "shared/side_menu.tmpl" %}
+     <h2 class="header_pages">Delete Alias</h2>
+     <div class="main_content">
+          <form method="POST" id="domain-form">
+            {{ form.hidden_tag() }}
+            {{ render_input_field(form.alias) }}
+            {{ render_submit() }}
+          </form>
+     </div>
 {% endblock %}

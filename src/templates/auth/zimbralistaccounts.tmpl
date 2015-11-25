@@ -3,14 +3,11 @@
 
 {% extends "shared/layout.tmpl" %}
 
-{% block title %}Zimbra Administration{% endblock %}
+{% block title %}Accounts list{% endblock %}
 {% block content %}
+{% include "shared/side_menu.tmpl" %}
     <h2 class="header_pages">List of all accouts</h2>
-    <div class="side_menu">
-        <h4><a href="{{ url_for('auth.adduserzimbra') }}">Create user</a></h4>
-    </div>
     <div class="main_content">
-
          <table >
               <tr><th>Ucet</th><th>Jmeno</th><th>Quota</th><th colspan="2">Action</th></tr>
                 {% set x = 0 %}
@@ -20,7 +17,11 @@
                                 <tr>
                                     <td style="padding: 10px">{{ n[1] }}</td>
                                     <td>{{ n[2] }}</td>
-                                    <td>{{ q[x]['used'] }} B /{% if q[x]['limit'] == "0" %} unlimited {% else %} {{ q[x]['limit'] }} B{% endif %}</td>
+                                    {% for i in q %}
+                                        {% if i['name'] == n[1] %}
+                                            <td>{{ ((i['used']|int)/1024/1024)|round(2,'ceil') }} MB /{% if (i['limit']|int) == 0 %} unlimited {% else %} {{ (i['limit']|int)/1024/1024 }} MB{% endif %}</td>
+                                        {% endif %}
+                                    {% endfor %}
                                     {% if not (n[1].split("@")[0] == "galsync" or (n[1].split("@")[0] != "admin" and n[1].split("@")[1] == "sspu-opava.local")) %}
                                     <td><a href="{{url_for('auth.edituserzimbra', id=n[0])}}">Editovat</a></td>
                                     {% endif %}

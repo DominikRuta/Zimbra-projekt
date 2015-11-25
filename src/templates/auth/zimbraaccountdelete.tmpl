@@ -5,10 +5,9 @@
 {% block title %}Delete user{% endblock %}
 
 {% block content %}
-  <h3>New Account</h3>
-  <form method="POST" id="delete-form">
-    {{ form.hidden_tag() }}
-    {{ render_input_field(form.email) }}
-    {{ render_submit() }}
-  </form>
+      <form method="POST" id="delete-form">
+        {{ form.hidden_tag() }}
+        {{ render_input_field(form.email) }}
+        {{ render_submit() }}
+      </form>
 {% endblock %}

@@ -4,7 +4,7 @@ from flask_wtf import Form
 from wtforms.fields import BooleanField, TextField, PasswordField, DateTimeField
 from wtforms.validators import EqualTo, Email, InputRequired, Length
 
-from ..data.models import User, LogUser
+from ..data.models import User
 from ..fields import Predicate
 
 def email_is_available(email):

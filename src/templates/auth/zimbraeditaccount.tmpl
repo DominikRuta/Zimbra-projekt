@@ -5,11 +5,8 @@
 {% block title %}Edit account{% endblock %}
 
 {% block content %}
+    {% include "shared/side_menu.tmpl" %}
     <h2 class="header_pages">Edit user</h2>
-    <div class="side_menu">
-        <h4><a href="{{ url_for('auth.newaliaszimbra', id=id) }}">Add Alias</a></h4>
-    <h4><a href="{{ url_for('auth.removealiaszimbra', id=id) }}">Delete Alias</a></h4>
-    </div>
     <div class="main_content">
       <form method="POST" id="register-form">
         {{ form.hidden_tag() }}

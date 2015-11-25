@@ -1,0 +1,19 @@
+    <div class="side_menu">
+            <h4><a href="{{ url_for('auth.adduserzimbra') }}">Create user</a></h4>
+            {% if current_user.email.split("@")[1] == "sspu-opava.local" %}
+              <h4><a href="{{ url_for('auth.adddomianzimbra') }}">Create domain</a></h4>
+            {% endif %}
+            <hr>
+            <h4><a href="{{ url_for('auth.listuserzimbra') }}">Users list</a></h4>
+            {% if current_user.email.split("@")[1] == "sspu-opava.local" %}
+              <h4><a href="{{ url_for('auth.listdomainszimbra') }}">Domains list</a></h4>
+            {% endif %}
+            <hr>
+
+
+            {% if request.path.split("/")[1] == "zimbraedituser" or request.path.split("/")[1] == "zimbranewalias"
+            or request.path.split("/")[1] == "zimbraremovealias" %}
+                <h4><a href="{{ url_for('auth.newaliaszimbra', id=request.path.split("/")[2]) }}">Add Alias</a></h4>
+                <h4><a href="{{ url_for('auth.removealiaszimbra', id=request.path.split("/")[2]) }}">Delete Alias</a></h4>
+            {% endif %}
+    </div>

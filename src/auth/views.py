@@ -15,9 +15,6 @@ import json
 
 blueprint = Blueprint('auth', __name__)
 
-#zm=ZimbraManager(url="https://mail.iservery.cz:7071/service/admin/soap",admin="admin@iservery.cz",password="sdfsdfsd")
-
-
 
 @blueprint.route('/activate', methods=['GET'])
 def activate():
@@ -89,17 +86,6 @@ def logout():
     flash("Logged out successfully", "info")
     return redirect(url_for('auth.login'))
 
-@blueprint.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        new_user = User.create(**form.data)
-        login_user(new_user)
-        send_activation(new_user)
-        flash("Thanks for signing up {}. Welcome!".format(escape(new_user.username)), 'info')
-        return redirect(url_for('public.index'))
-    return render_template("auth/register.tmpl", form=form)
-
 @login_required
 @blueprint.route('/resend_activation_email', methods=['GET'])
 def resend_activation_email():
@@ -167,16 +153,6 @@ def listdomainszimbra():
     else:
         return redirect(url_for('auth.listuserzimbra'))
 
-#@login_required
-#@blueprint.route('/zimbraquota', methods=['GET', 'POST'])
-#def listquotazimbra():
-#    if current_user.email.split("@")[1] == "sspu-opava.local":
-#        r = zm.getQuotaUsage()
-#        return render_template("auth/zimbralisaccounts.tmpl", quota=r)
-#    else:
-#        return redirect(url_for('auth.listuserzimbra'))
-
-
 @login_required
 @blueprint.route('/zimbradeletedomain/<id>', methods=['GET', 'POST'])
 def deletedomainzimbra(id):
@@ -194,8 +170,9 @@ def deletedomainzimbra(id):
 @blueprint.route('/zimbradeleteuser/<id>', methods=['GET', 'POST'])
 def deleteuserzimbra(id):
     r = zm.deleteAccount(id=id)
+    name=zm.getAccount(id=id)
     if(r):
-        flash("Account " + id +" was deleted", "info")
+        flash("Account " + name['GetAccountResponse']['account']['name'], "info")
     return redirect(url_for('auth.listuserzimbra'))
 
 @login_required
@@ -211,18 +188,12 @@ def listuserzimbra():
 #    return render_template("auth/zimbralistusers.tmpl", form=form)
 
 @login_required
-@blueprint.route('/loginpostmaster', methods=['GET', 'POST'])
-def loginpostmaster():
-    r = zm.getTokenUser(user='postmaster@test.cz',password='test123')
-    flash(r,'info')
-    return redirect(url_for('public.index'))
-
-@login_required
 @blueprint.route('/zimbraedituser/<id>', methods=['GET', 'POST'])
 def edituserzimbra(id):
     form = EditUserForm()
     r = zm.getAccount(id=id)
     name=r['GetAccountResponse']['account']['name'].split("@")[0]
+    print r['GetAccountResponse']['account']['a']
     if form.validate_on_submit():
         if zm.setPassword(id=id,password=form.password.data):
             flash("Heslo bylo zmeneno na: "+ form.password.data,"info")
