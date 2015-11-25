@@ -18,6 +18,7 @@ html {
 body {
   margin: 0;
 }
+
 article,
 aside,
 details,
@@ -2764,6 +2765,11 @@ fieldset[disabled] .btn {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+
+.btn-log {
+  font-weight: bold;
+}
+
 .btn-default {
   color: #ffffff;
   background-color: #95a5a6;
@@ -2848,8 +2854,8 @@ fieldset[disabled] .btn-primary.active {
 }
 .btn-success {
   color: #ffffff;
-  background-color: #18bc9c;
-  border-color: #18bc9c;
+  background-color: #33cc33;
+  border-color: #2eb82e;
 }
 .btn-success:hover,
 .btn-success:focus,
@@ -2857,8 +2863,8 @@ fieldset[disabled] .btn-primary.active {
 .btn-success.active,
 .open > .dropdown-toggle.btn-success {
   color: #ffffff;
-  background-color: #128f76;
-  border-color: #11866f;
+  background-color: #2eb72e;
+  border-color: #29a329;
 }
 .btn-success:active,
 .btn-success.active,
@@ -4083,13 +4089,14 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-default {
-  background-color: #2c3e50;
+  background-color: #1785c2;
   border-color: transparent;
 }
 .navbar-default .navbar-brand {
+  margin-top: 10px;
   color: #ffffff;
 }
-.navbar-default .navbar-brand:hover,
+
 .navbar-default .navbar-brand:focus {
   color: #18bc9c;
   background-color: transparent;
@@ -4183,7 +4190,7 @@ fieldset[disabled] .navbar-default .btn-link:focus {
   border-color: transparent;
 }
 .navbar-inverse .navbar-brand {
-  color: #ffffff;
+  color: #1785c2;
 }
 .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-brand:focus {
@@ -6375,9 +6382,11 @@ input:focus {
   box-shadow: none;
 }
 
+
 .header_pages {
-  color: red;
+  color: #f15a25;
   text-align: center;
+  font-weight: bold;
 }
 
 .side_menu {
@@ -6390,3 +6399,5 @@ input:focus {
   width: 80%;
   float:left;
 }
+
+
