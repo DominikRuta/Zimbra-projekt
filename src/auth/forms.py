@@ -55,6 +55,7 @@ class ResetPasswordForm(Form):
 
     confirm = PasswordField('Repeat password')
 
+
 class RegistrationForm(Form):
     username = TextField('Choose your username', validators=[
         Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
@@ -75,6 +76,7 @@ class RegistrationForm(Form):
         Length(min=6, max=30, message="Please use between 6 and 30 characters"),
         InputRequired(message="You can't leave this empty")
     ])
+
 class NewUserForm(Form):
     email = TextField('Your new email address', validators=[
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
@@ -94,24 +96,19 @@ class NewUserForm(Form):
     ])
 
 class EditUserForm(Form):
-    email = TextField('Your new email address', validators=[
-        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
-        #Email(message="Please enter a valid email address"),
-        #InputRequired(message="You can't leave this empty")
-    ])
     displayname = TextField('Prefered Display Name', validators=[
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
         #Email(message="Please enter a valid email address"),
         #InputRequired(message="You can't leave this empty")
     ])
 
-    password = PasswordField('New password', validators=[
-#        EqualTo('confirm', message='Passwords must match'),
-        Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
+class ChangePasswordForm(Form):
+    password = TextField('New password', validators=[
         Length(min=6, max=30, message="Please use between 6 and 30 characters"),
+        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
+        #Email(message="Please enter a valid email address"),
         InputRequired(message="You can't leave this empty")
     ])
-
 
 class DelUserForm(Form):
     email = TextField('Email address you want delete.', validators=[
@@ -123,18 +120,11 @@ class DelUserForm(Form):
 
 class NewAliasForm(Form):
         alias = TextField('Enter a new alias', validators=[
+        Length(min=3, max=10, message="Please use between 6 and 30 characters"),
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
         #Email(message="Please enter a valid email address"),
         InputRequired(message="You can't leave this empty")
     ])
-
-class RemoveAliasForm(Form):
-        alias = TextField('Enter alias to remove', validators=[
-        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
-        #Email(message="Please enter a valid email address"),
-        InputRequired(message="You can't leave this empty")
-    ])
-
 
 ###
 class DomainForm(Form):

@@ -3,7 +3,7 @@ from flask import (Blueprint, escape, flash, render_template,
 from flask_login import current_user, login_required, login_user, logout_user
 
 from .forms import ResetPasswordForm, EmailForm, LoginForm, RegistrationForm,NewUserForm, EditUserForm, DomainForm,\
-    NewAliasForm, RemoveAliasForm
+    NewAliasForm, ChangePasswordForm
 from ..data.database import db
 from ..data.models import User, UserPasswordToken
 from ..data.util import generate_random_token
@@ -73,7 +73,7 @@ def login():
                 user=User.find_by_email(form.email.data)
             zm.getToken()
             login_user(user, form.remember_me.data)
-            flash("Logged in successfully", "info")
+            #flash("Log in was successful", "info")
             return redirect(request.args.get('next') or url_for('auth.listuserzimbra'))
         else:
             flash("Invalid domain/password combination", "danger")
@@ -110,21 +110,9 @@ def reset_password(userid, user_token):
         return redirect(url_for('public.index'))
     return render_template("auth/reset_password.tmpl", form=form)
 
-@login_required
-@blueprint.route('/zimbraadduser', methods=['GET', 'POST'])
-def adduserzimbra():
-    form = NewUserForm()
-    if form.validate_on_submit():
-        if zm.createAccount(name=form.email.data+"@"+current_user.email.split("@")[1],
-                             password=form.password.data,
-                             quota=1000,
-                             displayname=form.displayname.data,
-                             status="active"):
-            flash("Account " + form.email.data +" created", "info")
-            return redirect(url_for('public.index'))
-    return render_template("auth/zimbraaccountadd.tmpl", form=form)
+######Sprava domen#####
 
-###
+#pridani domeny
 @login_required
 @blueprint.route('/zimbraadddomain', methods=['GET', 'POST'])
 def adddomianzimbra():
@@ -142,8 +130,8 @@ def adddomianzimbra():
         return render_template("auth/zimbranewdomain.tmpl", form=form)
     else:
         return redirect(url_for('auth.listuserzimbra'))
-###
 
+#seznam domen
 @login_required
 @blueprint.route('/zimbralistdomains', methods=['GET', 'POST'])
 def listdomainszimbra():
@@ -153,6 +141,7 @@ def listdomainszimbra():
     else:
         return redirect(url_for('auth.listuserzimbra'))
 
+#smazani domeny
 @login_required
 @blueprint.route('/zimbradeletedomain/<id>', methods=['GET', 'POST'])
 def deletedomainzimbra(id):
@@ -164,8 +153,25 @@ def deletedomainzimbra(id):
     else:
         return redirect(url_for('auth.listuserzimbra'))
 
-###
 
+#####Sprava uzivatelu######
+
+#pridani uzivatele
+@login_required
+@blueprint.route('/zimbraadduser', methods=['GET', 'POST'])
+def adduserzimbra():
+    form = NewUserForm()
+    if form.validate_on_submit():
+        if zm.createAccount(name=form.email.data+"@"+current_user.email.split("@")[1],
+                             password=form.password.data,
+                             quota=1000,
+                             displayname=form.displayname.data,
+                             status="active"):
+            flash("Account " + form.email.data+"@"+current_user.email.split("@")[1] +" created", "info")
+            return redirect(url_for('public.index'))
+    return render_template("auth/zimbraaccountadd.tmpl", form=form)
+
+#smazani uzivatele
 @login_required
 @blueprint.route('/zimbradeleteuser/<id>', methods=['GET', 'POST'])
 def deleteuserzimbra(id):
@@ -174,7 +180,7 @@ def deleteuserzimbra(id):
     if(r):
         flash("Account " + name['GetAccountResponse']['account']['name'], "info")
     return redirect(url_for('auth.listuserzimbra'))
-
+#seznam uzivatelu
 @login_required
 @blueprint.route('/zimbralistusers', methods=['GET', 'POST'])
 def listuserzimbra():
@@ -187,37 +193,69 @@ def listuserzimbra():
     return render_template("auth/zimbralistaccounts.tmpl", data=r,q=q['GetQuotaUsageResponse']['account'])
 #    return render_template("auth/zimbralistusers.tmpl", form=form)
 
+#uprava uzivatele
 @login_required
 @blueprint.route('/zimbraedituser/<id>', methods=['GET', 'POST'])
 def edituserzimbra(id):
     form = EditUserForm()
     r = zm.getAccount(id=id)
+    for i in r['GetAccountResponse']['account']['a']:
+        if i['n'] == "displayName":
+            displayname = i['_content']
+    if form.validate_on_submit():
+        if zm.modifyAccount(id=id):
+            for i in r['GetAccountResponse']['account']['a']:
+                if i['n'] == "displayName":
+                    print  i['_content']
+            flash("Heslo bylo zmeneno na: ","info")
+            return redirect(url_for('public.index'))
+    return render_template("auth/zimbraeditaccount.tmpl", displayName=displayname, form=form, id=id)
+
+#zmena hesla
+@login_required
+@blueprint.route('/zimbrachangepassword/<id>', methods=['GET', 'POST'])
+def changepasswordzimbra(id):
+    form = ChangePasswordForm()
+    r = zm.getAccount(id=id)
     name=r['GetAccountResponse']['account']['name'].split("@")[0]
-    print r['GetAccountResponse']['account']['a']
     if form.validate_on_submit():
         if zm.setPassword(id=id,password=form.password.data):
-            flash("Heslo bylo zmeneno na: "+ form.password.data,"info")
-            return redirect(url_for('public.index'))
-    return render_template("auth/zimbraeditaccount.tmpl", name=name, form=form, id=id)
+            flash("Heslo bylo zmeneno","info")
+            return redirect(url_for('auth.edituserzimbra', id=id))
+    return render_template("auth/zimbrachangepassword.tmpl", name=name, form=form, id=id)
 
+#pridani aliasu
 @login_required
 @blueprint.route('/zimbranewalias/<id>', methods=['GET', 'POST'])
 def newaliaszimbra(id):
     form = NewAliasForm()
     r = zm.getAccount(id=id)
-    if form.validate_on_submit():
-        if zm.addAccountAlias(id=id, alias=form.alias.data+"@"+current_user.email.split("@")[1]):
-            flash("Alias " + form.alias.data +" created in " + r['GetAccountResponse']['account']['name'], "info")
-            return redirect(url_for('public.index'))
-    return render_template("auth/zimbranewalias.tmpl", form=form)
+    for i in r['GetAccountResponse']['account']['a']:
+        if i['n'] == "displayName":
+            displayname = i['_content']
+    r = r['GetAccountResponse']['account']['name']
 
-@login_required
-@blueprint.route('/zimbraremovealias/<id>', methods=['GET', 'POST'])
-def removealiaszimbra(id):
-    form = RemoveAliasForm()
-    r = zm.getAccount(id=id)
     if form.validate_on_submit():
-        if zm.removeAccountAlias(id=id, alias=form.alias.data+"@"+current_user.email.split("@")[1]):
-            flash("Alias " + form.alias.data +" removed in " + r['GetAccountResponse']['account']['name'], "info")
-            return redirect(url_for('public.index'))
-    return render_template("auth/zimbraremovealias.tmpl", form=form)
+        if zm.addAccountAlias(id=id, alias=form.alias.data+"@"+r.split("@")[1]):
+            flash("Alias " + form.alias.data+"@"+r.split("@")[1] +" created in " + r, "info")
+            return redirect(url_for('auth.listaliaszimbra',id=id))
+    return render_template("auth/zimbranewalias.tmpl", form=form,displayName= displayname)
+
+#odstraneni aliasu
+@login_required
+@blueprint.route('/zimbraremovealias/<id>/<alias>', methods=['GET', 'POST'])
+def removealiaszimbra(id,alias):
+    r = zm.getAccount(id=id)
+    zm.removeAccountAlias(id=id, alias=alias)
+    flash("Alias " + alias + "removed in " + r['GetAccountResponse']['account']['name'], "info")
+    return redirect(url_for('auth.listaliaszimbra', id=id))
+
+#seznam aliasu
+@login_required
+@blueprint.route('/zimbralistaliases/<id>', methods=['GET', 'POST'])
+def listaliaszimbra(id):
+    r = zm.getAccount(id=id)
+    for i in r['GetAccountResponse']['account']['a']:
+        if i['n'] == "displayName":
+            displayname = i['_content']
+    return render_template("auth/zimbralistaliases.tmpl", r=r['GetAccountResponse']['account']['a'], id=id,displayName= displayname)
