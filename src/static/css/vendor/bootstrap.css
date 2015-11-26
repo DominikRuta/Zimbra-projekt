@@ -50,10 +50,12 @@ template {
 }
 a {
   background: transparent;
+  text-decoration: none;
 }
 a:active,
 a:hover {
   outline: 0;
+  text-decoration: none;
 }
 abbr[title] {
   border-bottom: 1px dotted;
@@ -103,6 +105,10 @@ hr {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
   height: 0;
+}
+
+.side_menu hr {
+  border-color: #999999;
 }
 pre {
   overflow: auto;
@@ -2770,6 +2776,14 @@ fieldset[disabled] .btn {
   font-weight: bold;
 }
 
+.btn-no-action {
+  color: #8c8c8c
+}
+
+.btn-no-action:hover {
+  color: #8c8c8c
+}
+
 .btn-default {
   color: #ffffff;
   background-color: #95a5a6;
@@ -2898,6 +2912,8 @@ fieldset[disabled] .btn-success.active {
   background-color: #3498db;
   border-color: #3498db;
 }
+
+
 .btn-info:hover,
 .btn-info:focus,
 .btn-info:active,
@@ -6386,18 +6402,90 @@ input:focus {
 .header_pages {
   color: #f15a25;
   text-align: center;
-  font-weight: bold;
+  font-size: 50px;
+  font-family: "Segoe UI";
 }
 
 .side_menu {
-  width: 15%;
+  width: 14%;
   float: left;
+  background-color: #f3f3f3;
+  padding: 30px 0px 20px 0px;
+  margin-top: -22px;
+
+}
+
+.side_menu hr {
+  margin: 5px auto 5px auto;
+  width: 80%;
+
+}
+
+
+.side_menu a {
+  margin: auto;
+  width: 80%;
+
+}
+
+.side_menu h3,h4 {
+    font-family: Segoe UI;
+}
+
+.side_menu h3 {
+  font-size: 25px;
+  margin-bottom: 3px;
+  margin-top: 25px;
+  margin-left: 20px;
+}
+
+.side_menu h4 {
+  font-size: 16px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.side_menu-link {
+  color: black;
+  padding: 5px 0px 5px 20px;
+}
+
+.side_menu-link:hover {
+  background-color: #e6e6e6;
+}
+.side_menu a:hover {
+  text-decoration: none;
 }
 
 .main_content {
   margin-left: 10px;
-  width: 80%;
+  width: 84%;
   float:left;
+}
+
+.main_content table {
+  margin: auto;
+  width: 100%;
+}
+
+
+.main_content th{
+  background-color: #1785c2;
+  color: white;
+  margin: 5px;
+}
+
+.table-action {
+  text-align: center;
+}
+.table-account {
+   width: 40%
+}
+.table-name {
+   width: 30%
+}
+.table-quota {
+   width: 23%
 }
 
 

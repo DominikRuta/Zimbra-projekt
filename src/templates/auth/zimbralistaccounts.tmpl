@@ -5,29 +5,36 @@
 
 {% block title %}Accounts list{% endblock %}
 {% block content %}
-{% include "shared/side_menu.tmpl" %}
+    {% include "shared/side_menu.tmpl" %}
     <h2 class="header_pages">List of all accouts</h2>
+
     <div class="main_content">
-         <table >
-              <tr><th>Ucet</th><th>Jmeno</th><th>Quota</th><th colspan="2">Action</th></tr>
+         <table class="table-bordered" >
+              <thead>
+              <tr ><th>Ucet</th><th>Jmeno</th><th>Quota (MB)</th><th colspan="2" class="table-action">Action</th></tr>
+              </thead>
                 {% set x = 0 %}
                 {% for n in data %}
 
                         {% if (n[1].split("@")[1] == current_user.email.split("@")[1] or current_user.email.split("@")[1] == "sspu-opava.local") %}
-                                <tr>
-                                    <td style="padding: 10px">{{ n[1] }}</td>
-                                    <td>{{ n[2] }}</td>
+                                <tr >
+                                    <td class="table-account" style="padding: 10px" >{{ n[1] }}</td>
+                                    <td class="table-name">{{ n[2] }}</td>
                                     {% for i in q %}
                                         {% if i['name'] == n[1] %}
-                                            <td>{{ ((i['used']|int)/1024/1024)|round(2,'ceil') }} MB /{% if (i['limit']|int) == 0 %} unlimited {% else %} {{ (i['limit']|int)/1024/1024 }} MB{% endif %}</td>
+                                            <td class="table-quota">{{ ((i['used']|int)/1024/1024)|round(2,'ceil') }} /{% if (i['limit']|int) == 0 %} unlimited {% else %} {{ (i['limit']|int)/1024/1024 }} {% endif %}</td>
                                         {% endif %}
                                     {% endfor %}
                                     {% if not (n[1].split("@")[0] == "galsync" or (n[1].split("@")[0] != "admin" and n[1].split("@")[1] == "sspu-opava.local")) %}
-                                    <td><a href="{{url_for('auth.edituserzimbra', id=n[0])}}">Editovat</a></td>
+                                        <td ><a href="{{url_for('auth.edituserzimbra', id=n[0])}}"><button class="btn btn-success btn-log ">Editovat</button></a></td>
+                                    {% else %}
+                                        <td><button class="btn btn-no-action btn-log disabled">Editovat</button></td>
                                     {% endif %}
 
                                     {% if not (n[1].split("@")[0] == "postmaster" or n[1].split("@")[0] == "galsync" or n[1].split("@")[1] == "sspu-opava.local") %}
-                                    <td><a href="{{url_for('auth.deleteuserzimbra', id=n[0])}}">Smazat</a></td>
+                                        <td><a href="{{url_for('auth.deleteuserzimbra', id=n[0])}}"><button class="btn btn-danger btn-log ">Smazat</button></a></td>
+                                    {% else %}
+                                        <td ><button class="btn btn-no-action btn-log disabled">Smazat</button></td>
                                     {% endif %}
                                 </tr>
                             {% set x = x + 1  %}
