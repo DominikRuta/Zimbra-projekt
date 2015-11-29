@@ -1,0 +1,17 @@
+{% from "macros/fields.tmpl" import render_input_field, render_password_field,
+                                    render_submit %}
+{% extends "shared/layout.tmpl" %}
+
+{% block title %}New alias{% endblock %}
+
+{% block content %}
+     {% include "shared/side_menu.tmpl" %}
+     <h2 class="header_pages">New Distribution list - <span class="span-display-name">{{ displayName }}</span></h2>
+     <div class="main_content col-md-9">
+          <form method="POST" id="domain-form">
+            {{ form.hidden_tag() }}
+            {{ render_input_field(form.distlistname) }}
+            {{ render_submit() }}
+          </form>
+     </div>
+{% endblock %}

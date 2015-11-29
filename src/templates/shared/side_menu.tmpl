@@ -9,15 +9,21 @@
              <h3>Users</h3>
                 <a href="{{ url_for('auth.adduserzimbra') }}"><h4 {% if request.path.split("/")[1] == "zimbraadduser" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">Create user</h4></a>
                 <a href="{{ url_for('auth.listuserzimbra') }}"><h4 {% if request.path.split("/")[1] == "zimbralistusers" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">Users list</h4></a>
-            {% if request.path.split("/")[1] == "zimbraedituser" or request.path.split("/")[1] == "zimbranewalias"
+
+             {% if request.path.split("/")[1] == "zimbraedituser" or request.path.split("/")[1] == "zimbranewalias"
              or request.path.split("/")[1] == "zimbralistaliases" or request.path.split("/")[1] == "zimbrachangepassword" %}
                 <a href="{{url_for('auth.edituserzimbra', id=request.path.split("/")[2])}}"><h4 {% if request.path.split("/")[1] == "zimbraedituser" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">Edit User</h4></a>
 
             <h3>Aliases</h3>
                 <a href="{{ url_for('auth.newaliaszimbra', id=request.path.split("/")[2]) }}"><h4 {% if request.path.split("/")[1] == "zimbranewalias" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">Add Alias</h4></a>
                 <a href="{{ url_for('auth.listaliaszimbra', id=request.path.split("/")[2]) }}"><h4 {% if request.path.split("/")[1] == "zimbralistaliases" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">List Aliases</h4></a>
-
-            <h3>Password</h3>
+            {% endif %}
+            <h3>Distribution lists</h3>
+                <a href="{{ url_for('auth.adddlzimbra') }}"><h4 {% if request.path.split("/")[1] == "zimbraadddls" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">New list</h4></a>
+                <a href="{{ url_for('auth.listdlszimbra') }}"><h4 {% if request.path.split("/")[1] == "zimbralistdls" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">Distribution list</h4></a>
+            {% if request.path.split("/")[1] == "zimbraedituser" or request.path.split("/")[1] == "zimbranewalias"
+             or request.path.split("/")[1] == "zimbralistaliases" or request.path.split("/")[1] == "zimbrachangepassword" %}
+                <h3>Password</h3>
                 <a href="{{ url_for('auth.changepasswordzimbra', id=request.path.split("/")[2]) }}"><h4 {% if request.path.split("/")[1] == "zimbrachangepassword" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">Change Password</h4></a>
             {% endif %}
     </div>

@@ -120,7 +120,7 @@ class DelUserForm(Form):
 
 class NewAliasForm(Form):
         alias = TextField('Enter a new alias', validators=[
-        Length(min=3, max=10, message="Please use between 6 and 30 characters"),
+        Length(min=3, max=10, message="Please use between 3 and 10 characters"),
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
         #Email(message="Please enter a valid email address"),
         InputRequired(message="You can't leave this empty")
@@ -136,3 +136,10 @@ class DomainForm(Form):
         InputRequired(message="You can't leave this empty")
     ])
 ###
+
+class DistListForm(Form):
+    distlistname = TextField('Choose your name for distributionlist', validators=[
+        #Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
+        Length(min=3, max=30, message="Please use between 6 and 30 characters"),
+        InputRequired(message="You can't leave this empty")
+    ])
