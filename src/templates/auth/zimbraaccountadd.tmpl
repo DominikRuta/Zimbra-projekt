@@ -2,11 +2,11 @@
                                     render_submit %}
 {% extends "shared/layout.tmpl" %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Nový uživatel{% endblock %}
 
 {% block content %}
     {% include "shared/side_menu.tmpl" %}
-    <h2 class="header_pages">New user</h2>
+    <h2 class="header_pages">Nový uživatel</h2>
     <div class="main_content col-md-9">
       <form method="POST" id="register-form">
         {{ form.hidden_tag() }}

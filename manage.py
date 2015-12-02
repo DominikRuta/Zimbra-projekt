@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-
+# -*- coding: utf-8 -*-
 """
 Usage: ./manage.py [submanager] <command>
 Manage script for development. Type ./manage.py for more info
 """
+import argparse
 import os
 
 from flask_script import Manager

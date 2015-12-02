@@ -3788,6 +3788,7 @@ border-radius: 4px;
 @media (min-width: 768px) {
 .navbar-header {
 float: left;
+    padding-top: 5px;
 }
 }
 .navbar-collapse {
@@ -3889,6 +3890,14 @@ font-size: 19px;
 line-height: 21px;
 height: 60px;
 }
+.navbar-brand span {
+    margin-left: 5px;
+}
+
+.navbar-brand img {
+    margin-top: -6px;
+}
+
 .navbar-brand:hover,
 .navbar-brand:focus {
 text-decoration: none;
@@ -6411,6 +6420,7 @@ width: 80%;
 margin: auto;
 width: 80%;
 }
+
 .side_menu h3,h4 {
 font-family: Segoe UI;
 }
@@ -6457,4 +6467,8 @@ width: 30%
 }
 .table-quota {
 width: 23%
+}
+
+#adm {
+    font-size: 1.3em;
 }

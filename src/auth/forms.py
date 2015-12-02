@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import sys
+reload(sys)  # Reload does the trick!
+sys.setdefaultencoding('UTF8')
 import re
 
 from flask_wtf import Form
@@ -34,16 +39,16 @@ class EmailForm(Form):
         InputRequired(message="You can't leave this empty")
     ])
 class DomainForm(Form):
-    email = TextField('Domain Address', validators=[
+    email = TextField('Doména', validators=[
         #Predicate(domain_validate, message="Please use domain name"),
-        InputRequired(message="You can't leave this empty")
+        InputRequired(message="Vyplňte prosím toto pole")
     ])
 class LoginForm(DomainForm):
-    password = PasswordField('Password', validators=[
-        InputRequired(message="You can't leave this empty")
+    password = PasswordField('Heslo', validators=[
+        InputRequired(message="Vyplňte prosím toto pole")
     ])
 
-    remember_me = BooleanField('Keep me logged in')
+    remember_me = BooleanField('Zůstat přihlášen')
 
 class ResetPasswordForm(Form):
     password = PasswordField('New password', validators=[
@@ -78,36 +83,34 @@ class RegistrationForm(Form):
     ])
 
 class NewUserForm(Form):
-    email = TextField('Your new email address', validators=[
+    email = TextField('E-mailová adresa', validators=[
+        Predicate(safe_characters, message="Použijte pouze číslice a písmena (a-z) bez diaktritiky"),
+        InputRequired(message="Vyplňte prosím toto pole")
+    ])
+    displayname = TextField('Jméno uživatele', validators=[
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
         #Email(message="Please enter a valid email address"),
-        InputRequired(message="You can't leave this empty")
+        InputRequired(message="Vyplňte prosím toto pole")
     ])
-    displayname = TextField('Prefered Display Name', validators=[
-        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
-        #Email(message="Please enter a valid email address"),
-        InputRequired(message="You can't leave this empty")
-    ])
-    password = PasswordField('New password', validators=[
+    password = PasswordField('Heslo', validators=[
 #        EqualTo('confirm', message='Passwords must match'),
-        Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
-        Length(min=6, max=30, message="Please use between 6 and 30 characters"),
-        InputRequired(message="You can't leave this empty")
+        Predicate(safe_characters, message="Použijte pouze číslice a písmena (a-z) bez diaktritiky"),
+        Length(min=6, max=30, message="Zvolte prosím heslo obsahující 6-30 znaků"),
+        InputRequired(message="Vyplňte prosím toto pole")
     ])
 
 class EditUserForm(Form):
-    displayname = TextField('Prefered Display Name', validators=[
+    displayname = TextField('Zvolte název uživatele', validators=[
         #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
         #Email(message="Please enter a valid email address"),
         #InputRequired(message="You can't leave this empty")
     ])
 
 class ChangePasswordForm(Form):
-    password = TextField('New password', validators=[
-        Length(min=6, max=30, message="Please use between 6 and 30 characters"),
-        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
-        #Email(message="Please enter a valid email address"),
-        InputRequired(message="You can't leave this empty")
+    password = TextField('Zadejte nové heslo', validators=[
+        Length(min=6, max=30, message="Zvolte prosím nové heslo obsahující 6-30 znaků"),
+        Predicate(safe_characters, message="Použijte pouze číslice a písmena (a-z) bez diaktritiky"),
+        InputRequired(message="Vyplňte prosím toto pole")
     ])
 
 class DelUserForm(Form):
@@ -119,27 +122,26 @@ class DelUserForm(Form):
 
 
 class NewAliasForm(Form):
-        alias = TextField('Enter a new alias', validators=[
-        Length(min=3, max=10, message="Please use between 3 and 10 characters"),
-        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
-        #Email(message="Please enter a valid email address"),
-        InputRequired(message="You can't leave this empty")
+        alias = TextField('Zadejte název nového aliasu', validators=[
+        Length(min=3, max=10, message="Zvolte prosím název aliasu obsahující 3-10 znaků"),
+        Predicate(safe_characters, message="Použijte pouze číslice a písmena (a-z) bez diaktritiky"),
+        InputRequired(message="Vyplňte prosím toto pole")
     ])
 
 ###
 class DomainForm(Form):
-    domainname = TextField('Choose your name for domain', validators=[
-        #Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
+    domainname = TextField('Zadejte název nové domény', validators=[
+        #Predicate(safe_characters, message="Použijte pouze číslice a písmena (a-z) bez diaktritiky"),
         Predicate(username_is_available,
-                  message="A domain has already been registered with that name. Try another?"),
-        Length(min=3, max=30, message="Please use between 6 and 30 characters"),
-        InputRequired(message="You can't leave this empty")
+                  message="Název domény je již obsazen. Zkuste prosím jiny."),
+        Length(min=3, max=30, message="Zvolte prosím název domény obsahující 3-30 znaků"),
+        InputRequired(message="Vyplňte prosím toto pole")
     ])
 ###
 
 class DistListForm(Form):
-    distlistname = TextField('Choose your name for distributionlist', validators=[
-        #Predicate(safe_characters, message="Please use only letters (a-z) and numbers"),
-        Length(min=3, max=30, message="Please use between 6 and 30 characters"),
-        InputRequired(message="You can't leave this empty")
+    distlistname = TextField('Zadejte název nového distribučního listu', validators=[
+        Predicate(safe_characters, message="Použijte pouze číslice a písmena (a-z) bez diaktritiky"),
+        Length(min=3, max=20, message="Zvolte prosím název listu obsahující 3-20 znaků"),
+        InputRequired(message="Vyplňte prosím toto pole")
     ])

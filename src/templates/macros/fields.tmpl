@@ -1,3 +1,4 @@
+
 {# Form helper macros come in two sets:
 
 render_xyz: A macro to render a label and control of type xyz.  These
@@ -24,6 +25,7 @@ a paragraph with any field-related errors beneath the field's control.
 
 {% macro render_input(name, value, label=None, type="text", disabled=False, readonly=False, errors=None, lc=None, rc=None) %}
   {% if label is not none and type != "hidden" %}
+
     <label class="{{ lc if lc else '' }} control-label" for="{{ name }}">{{ label }}</label>
   {% endif %}
   <div class="{{ rc if rc else '' }}">

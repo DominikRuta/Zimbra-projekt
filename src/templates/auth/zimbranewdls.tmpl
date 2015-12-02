@@ -2,11 +2,11 @@
                                     render_submit %}
 {% extends "shared/layout.tmpl" %}
 
-{% block title %}New alias{% endblock %}
+{% block title %}Nový distribuční list{% endblock %}
 
 {% block content %}
      {% include "shared/side_menu.tmpl" %}
-     <h2 class="header_pages">New Distribution list - <span class="span-display-name">{{ displayName }}</span></h2>
+     <h2 class="header_pages">Nový distribuční list</h2>
      <div class="main_content col-md-9">
           <form method="POST" id="domain-form">
             {{ form.hidden_tag() }}

@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import sys
+reload(sys)  # Reload does the trick!
+sys.setdefaultencoding('UTF8')
 from flask import (Blueprint, escape, flash, render_template,
                    redirect, request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
@@ -76,14 +81,14 @@ def login():
             #flash("Log in was successful", "info")
             return redirect(request.args.get('next') or url_for('auth.listuserzimbra'))
         else:
-            flash("Invalid domain/password combination", "danger")
+            flash("Špatná kombinace hesla/domény", "danger")
     return render_template("auth/login.tmpl", form=form)
 
 @blueprint.route('/logout', methods=['GET'])
 @login_required
 def logout():
     logout_user()
-    flash("Logged out successfully", "info")
+    flash("Úspěšně odhlášen", "info")
     return redirect(url_for('auth.login'))
 
 @login_required
@@ -121,11 +126,11 @@ def adddomianzimbra():
         if form.validate_on_submit():
             if zm.createDomain(name=form.domainname.data ):
                 zm.createAccount(name="postmaster@"+form.domainname.data,
-                             password=form.domainname.data.split("@")[0]+"123",
+                             password=form.domainname.data.split(".")[0]+"123",
                              quota=1000,
                              displayname=form.domainname.data,
                              status="active")
-                flash("Domain " + form.domainname.data +" created", "info")
+                flash("Doména " + form.domainname.data +" byla úspěšně vytvořena", "info")
                 return redirect(url_for('public.index'))
         return render_template("auth/zimbranewdomain.tmpl", form=form)
     else:
@@ -146,9 +151,17 @@ def listdomainszimbra():
 @blueprint.route('/zimbradeletedomain/<id>', methods=['GET', 'POST'])
 def deletedomainzimbra(id):
     if current_user.email.split("@")[1] == "sspu-opava.local":
+        a = zm.getAllAccount()
+        d = zm.getDomain(id=id)
+        d = d['GetDomainResponse']['domain']['name']
+        print d
+        for i in a:
+            if i[1].split("@")[1] == d:
+                print i[1].split("@")[1]
+                zm.deleteAccount(id=i[0])
         r = zm.deleteDomain(id=id)
         if(r):
-            flash("Domain " + id +" was deleted", "info")
+            flash("Doména " + d +" byla smazána", "info")
         return redirect(url_for('auth.listdomainszimbra'))
     else:
         return redirect(url_for('auth.listuserzimbra'))
@@ -167,7 +180,7 @@ def adduserzimbra():
                              quota=1000,
                              displayname=form.displayname.data,
                              status="active"):
-            flash("Account " + form.email.data+"@"+current_user.email.split("@")[1] +" created", "info")
+            flash("Účet " + form.email.data+"@"+current_user.email.split("@")[1] +" byl úspěšně vytvořen", "info")
             return redirect(url_for('public.index'))
     return render_template("auth/zimbraaccountadd.tmpl", form=form)
 
@@ -178,7 +191,7 @@ def deleteuserzimbra(id):
     r = zm.deleteAccount(id=id)
     name=zm.getAccount(id=id)
     if(r):
-        flash("Account " + name['GetAccountResponse']['account']['name'], "info")
+        flash("Účet" + name['GetAccountResponse']['account']['name'], "info")
     return redirect(url_for('auth.listuserzimbra'))
 
 #seznam uzivatelu
@@ -208,7 +221,7 @@ def edituserzimbra(id):
             for i in r['GetAccountResponse']['account']['a']:
                 if i['n'] == "displayName":
                     print  i['_content']
-            flash("Jmeno bylo zmeneno na: "+displayname,"info")
+            flash("Jméno bylo úspěšně změněno na: "+displayname,"info")
             return redirect(url_for('public.index'))
     return render_template("auth/zimbraeditaccount.tmpl", displayName=displayname, form=form, id=id)
 
@@ -221,7 +234,7 @@ def changepasswordzimbra(id):
     name=r['GetAccountResponse']['account']['name'].split("@")[0]
     if form.validate_on_submit():
         if zm.setPassword(id=id,password=form.password.data):
-            flash("Heslo bylo zmeneno","info")
+            flash("Heslo bylo úspěšně změněno","info")
             return redirect(url_for('auth.edituserzimbra', id=id))
     return render_template("auth/zimbrachangepassword.tmpl", name=name, form=form, id=id)
 
@@ -238,7 +251,7 @@ def newaliaszimbra(id):
 
     if form.validate_on_submit():
         if zm.addAccountAlias(id=id, alias=form.alias.data+"@"+r.split("@")[1]):
-            flash("Alias " + form.alias.data+"@"+r.split("@")[1] +" created in " + r, "info")
+            flash("Nový alias " + form.alias.data+"@"+r.split("@")[1] +" uživatele " + r + " byl úspěšně vytvořen", "info")
             return redirect(url_for('auth.listaliaszimbra',id=id))
     return render_template("auth/zimbranewalias.tmpl", form=form,displayName= displayname)
 
@@ -248,7 +261,7 @@ def newaliaszimbra(id):
 def removealiaszimbra(id,alias):
     r = zm.getAccount(id=id)
     if zm.removeAccountAlias(id=id, alias=alias):
-        flash("Alias " + alias + "removed in " + r['GetAccountResponse']['account']['name'], "info")
+        flash("Alias " + alias + " uživatele " + r['GetAccountResponse']['account']['name'] + " byl úspěšně smazán", "info")
     return redirect(url_for('auth.listaliaszimbra', id=id))
 
 #seznam aliasu
@@ -270,7 +283,7 @@ def adddlzimbra():
         form = DistListForm()
         if form.validate_on_submit():
             if zm.createDistributionList(name=form.distlistname.data + "@" + current_user.email.split("@")[1], dynamic=0):
-                flash("Distribution list " + form.distlistname.data +" created", "info")
+                flash("Distribuční list " + form.distlistname.data +" byl úspěšně vytvořen", "info")
                 return redirect(url_for('auth.listdlszimbra'))
         return render_template("auth/zimbranewdls.tmpl", form=form)
 
@@ -280,7 +293,7 @@ def deletedlzimbra(id):
         r = zm.getDistributionList(id=id)
         all = zm.getAllDistributionLists(name=current_user.email.split("@")[1])
         if zm.deleteDistributionList(id=id):
-            flash("Distribution list " + r['GetDistributionListResponse']['dl']['name'] +" was deleted", "info")
+            flash("Distribuční list " + r['GetDistributionListResponse']['dl']['name'] +" byl úspěšně smazán", "info")
         return redirect(url_for('auth.listdlszimbra', data = all))
 
 
@@ -289,5 +302,10 @@ def deletedlzimbra(id):
 @blueprint.route('/zimbralistdls', methods=['GET', 'POST'])
 def listdlszimbra():
         r = zm.getAllDistributionLists(name=current_user.email.split("@")[1])
+        #for i in r['GetAllDistributionListsResponse']['dl']['a']:
+         #   if i['n'] == "mail":
+          #      mail = i['_content']
+           # elif i['n'] == "zimbraId":
+            #    id = i['_content']
         print r
-        return render_template("auth/zimbralistdls.tmpl", data=r)
+        return render_template("auth/zimbralistdls.tmpl", data=r)#mail=mail,id=id)
