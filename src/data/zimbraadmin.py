@@ -328,7 +328,10 @@ class ZimbraManager:
             "urn:zimbraAdmin"
         )
 
-        return response
+        if 'dl' in ['GetAllDistributionListsResponse']:
+            return [(i['id'], i['name']) for i in response['GetAllDistributionListsResponse']['dl']]
+        else:
+            return response
 
 
     def deleteDistributionList(self, *args, **kwargs):

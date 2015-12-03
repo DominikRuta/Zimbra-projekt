@@ -13,14 +13,12 @@
             <thead>
                     <tr><th>Distribuční list</th><th>ID</th><th width="10%" colspan="2" class="table-action">Akce</th></tr>
             </thead>
-                {%for i in data %}
                 <tr>
-                    <td>{{ i[1] }}</td>
-                    <td>{{ i[0] }}</td>
+                    <td>{{ name }}</td>
+                    <td>{{ id }}</td>
                     <td ><a><button class="btn btn-success btn-log ">Editovat</button></a></td>
-                    <td><a href="{{url_for('auth.deletedlzimbra',id=i[0])}}"><button class="btn btn-danger btn-log ">Smazat</button></a></td>
+                    <td><a href="{{url_for('auth.deletedlzimbra',id=id)}}"><button class="btn btn-danger btn-log ">Smazat</button></a></td>
                 </tr>
-                {% endfor %}
         </table>
     </div>
 {% endblock %}

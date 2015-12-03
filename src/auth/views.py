@@ -3,6 +3,7 @@
 import sys
 reload(sys)  # Reload does the trick!
 sys.setdefaultencoding('UTF8')
+
 from flask import (Blueprint, escape, flash, render_template,
                    redirect, request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
@@ -142,6 +143,7 @@ def adddomianzimbra():
 def listdomainszimbra():
     if current_user.email.split("@")[1] == "sspu-opava.local":
         r = zm.getAllDomain()
+        print r
         return render_template("auth/zimbralistdomians.tmpl", data=r)
     else:
         return redirect(url_for('auth.listuserzimbra'))
@@ -188,10 +190,11 @@ def adduserzimbra():
 @login_required
 @blueprint.route('/zimbradeleteuser/<id>', methods=['GET', 'POST'])
 def deleteuserzimbra(id):
-    r = zm.deleteAccount(id=id)
     name=zm.getAccount(id=id)
+    name=name['GetAccountResponse']['account']['name']
+    r = zm.deleteAccount(id=id)
     if(r):
-        flash("Účet" + name['GetAccountResponse']['account']['name'], "info")
+        flash("Účet " + name + " byl úspěšně smazán.", "info")
     return redirect(url_for('auth.listuserzimbra'))
 
 #seznam uzivatelu
@@ -302,10 +305,5 @@ def deletedlzimbra(id):
 @blueprint.route('/zimbralistdls', methods=['GET', 'POST'])
 def listdlszimbra():
         r = zm.getAllDistributionLists(name=current_user.email.split("@")[1])
-        #for i in r['GetAllDistributionListsResponse']['dl']['a']:
-         #   if i['n'] == "mail":
-          #      mail = i['_content']
-           # elif i['n'] == "zimbraId":
-            #    id = i['_content']
         print r
-        return render_template("auth/zimbralistdls.tmpl", data=r)#mail=mail,id=id)
+        return render_template("auth/zimbralistdls.tmpl", name=r['GetAllDistributionListsResponse']['dl'][0]['name'],id=r['GetAllDistributionListsResponse']['dl'][1]['id'])

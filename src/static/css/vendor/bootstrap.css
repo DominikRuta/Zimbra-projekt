@@ -3789,6 +3789,7 @@ border-radius: 4px;
 .navbar-header {
 float: left;
     padding-top: 5px;
+
 }
 }
 .navbar-collapse {
@@ -4664,8 +4665,8 @@ border-top-color: #15a589;
 color: #e6e6e6;
 }
 .alert-info {
-background-color: #3498db;
-border-color: #3498db;
+background-color:  #1785c2;
+border-color:  #1785c2;
 color: #ffffff;
 }
 .alert-info hr {
