@@ -173,18 +173,22 @@ def deletedomainzimbra(id):
 
 #pridani uzivatele
 @login_required
-@blueprint.route('/zimbraadduser', methods=['GET', 'POST'])
-def adduserzimbra():
-    form = NewUserForm()
-    if form.validate_on_submit():
-        if zm.createAccount(name=form.email.data+"@"+current_user.email.split("@")[1],
-                             password=form.password.data,
-                             quota=1000,
-                             displayname=form.displayname.data,
-                             status="active"):
+@blueprint.route('/zimbraadduser', methods=['GET', 'POST'])     #definování URL podadresy a metod
+def adduserzimbra():                                            #definování funkce bez parametru
+    form = NewUserForm()                    #přivolání potřebného formuláře pro novehé uživatele
+    if form.validate_on_submit():           #podmínka, která zjistí, zda byla akce potvrzena tlačítkem
+        if zm.createAccount(
+                    #získání jména uživatele a připojí k němu doménu formuláře
+                    name=form.email.data+"@"+current_user.email.split("@")[1],
+                    password=form.password.data,       #získání hesla z formuláře
+                    quota=1000,                        #quota je pevně nastavena na 1000 MB
+                    displayname=form.displayname.data, #získání názvu účtu z formuláře
+                    status="active"):                  #status nastaví na aktivní
+            #po úspěšném vytvoření uživatele napíše hlášku
             flash("Účet " + form.email.data+"@"+current_user.email.split("@")[1] +" byl úspěšně vytvořen", "info")
-            return redirect(url_for('public.index'))
-    return render_template("auth/zimbraaccountadd.tmpl", form=form)
+
+            return redirect(url_for('public.index'))    #přesměrování na hlavní stránku (výpis uživatelů)
+    return render_template("auth/zimbraaccountadd.tmpl", form=form) #vyvolání šablony a předání formuláře do šablony
 
 #smazani uzivatele
 @login_required
@@ -199,33 +203,40 @@ def deleteuserzimbra(id):
 
 #seznam uzivatelu
 @login_required
-@blueprint.route('/zimbralistusers', methods=['GET', 'POST'])
-def listuserzimbra():
+@blueprint.route('/zimbralistusers', methods=['GET', 'POST'])           #definování URL podadresy a metod
+def listuserzimbra():                                                   #definování funkce bez parametru
    # print current_user.email
-    r = zm.getAllAccount()
-    if not current_user.email.split("@")[1] == "sspu-opava.local":
+    r = zm.getAllAccount()                                              #získání dat ze zimbraadmin.py
+    print r
+    if not current_user.email.split("@")[1] == "sspu-opava.local":      #podmínky
         q = zm.getQuotaUsage(domain=current_user.email.split("@")[1])
     else:
         q = zm.getQuotaUsage(allServers=1)
+    #vyvolání šablony a předání dat do šablony
     return render_template("auth/zimbralistaccounts.tmpl", data=r,q=q['GetQuotaUsageResponse']['account'])
-#    return render_template("auth/zimbralistusers.tmpl", form=form)
 
 #uprava uzivatele
 @login_required
-@blueprint.route('/zimbraedituser/<id>', methods=['GET', 'POST'])
-def edituserzimbra(id):
-    form = EditUserForm()
-    r = zm.getAccount(id=id)
+@blueprint.route('/zimbraedituser/<id>', methods=['GET', 'POST'])  #definování URL podadresy a metod
+def edituserzimbra(id):                                 #definování funkce s parametrem ID uživatele
+    form = EditUserForm()                       #přivolání potřebného formuláře pro úpravu uživatele
+    r = zm.getAccount(id=id)            #získání uživatele kterého chceme upravit pomocí ID
+    #cyklus, který nám zjistí, kterého uživatele právě upravujeme
     for i in r['GetAccountResponse']['account']['a']:
         if i['n'] == "displayName":
             displayname = i['_content']
+    #podmínka, zda bylo stisknuto tlačítko pro úpravu
     if form.validate_on_submit():
+        #podmínka, ve které upravujeme účet, předáváme ID a nový název
         if zm.modifyAccount(id=id, displayname=form.displayname.data):
+            #cyklus, který nám zjistí, nové jméno
             for i in r['GetAccountResponse']['account']['a']:
                 if i['n'] == "displayName":
                     print  i['_content']
+            #hláška o úspěšné úpravě
             flash("Jméno bylo úspěšně změněno na: "+displayname,"info")
             return redirect(url_for('public.index'))
+    #vyvolání šablony a předání dat do šablony
     return render_template("auth/zimbraeditaccount.tmpl", displayName=displayname, form=form, id=id)
 
 #zmena hesla
@@ -243,27 +254,34 @@ def changepasswordzimbra(id):
 
 #pridani aliasu
 @login_required
-@blueprint.route('/zimbranewalias/<id>', methods=['GET', 'POST'])
-def newaliaszimbra(id):
-    form = NewAliasForm()
-    r = zm.getAccount(id=id)
+@blueprint.route('/zimbranewalias/<id>', methods=['GET', 'POST'])   #definování URL podadresy a metod
+def newaliaszimbra(id):                                  #definování funkce s parametrem ID uživatele
+    form = NewAliasForm()                        #přivolání potřebného formuláře pro novehé uživatele
+    r = zm.getAccount(id=id)            #získání uživatele podle ID, ke kterému chteme vytvořit alias
+    #cyklus, který nám zjistí, ke kterému uživateli přidáváme alias
     for i in r['GetAccountResponse']['account']['a']:
         if i['n'] == "displayName":
             displayname = i['_content']
     r = r['GetAccountResponse']['account']['name']
-
+    #podmínka, zda bylo stisknuto tlačítko pro vytvoření
     if form.validate_on_submit():
+        #podmínka, ve které vytváříme samotný alias, předáváme ID a název aliasu
         if zm.addAccountAlias(id=id, alias=form.alias.data+"@"+r.split("@")[1]):
+            #hláška o úspěšném vytvoření aliasu
             flash("Nový alias " + form.alias.data+"@"+r.split("@")[1] +" uživatele " + r + " byl úspěšně vytvořen", "info")
+            #přesměrování na výpis aliasů
             return redirect(url_for('auth.listaliaszimbra',id=id))
+     #vyvolání šablony, předání formuláře a jméno uživatele
     return render_template("auth/zimbranewalias.tmpl", form=form,displayName= displayname)
 
 #odstraneni aliasu
 @login_required
-@blueprint.route('/zimbraremovealias/<id>/<alias>', methods=['GET', 'POST'])
-def removealiaszimbra(id,alias):
-    r = zm.getAccount(id=id)
+@blueprint.route('/zimbraremovealias/<id>/<alias>', methods=['GET', 'POST']) #definování URL podadresy a metod
+def removealiaszimbra(id,alias):                         #definování funkce s parametrem ID uživatele a aliasu
+    r = zm.getAccount(id=id)                     #získání uživatele podle ID, ke kterému chteme vytvořit alias
+    #cyklus, který nám zjistí, který alias a kterému uživateli daný alias mažeme
     if zm.removeAccountAlias(id=id, alias=alias):
+        #hláška o úspěšném smazání aliasu
         flash("Alias " + alias + " uživatele " + r['GetAccountResponse']['account']['name'] + " byl úspěšně smazán", "info")
     return redirect(url_for('auth.listaliaszimbra', id=id))
 
@@ -305,5 +323,8 @@ def deletedlzimbra(id):
 @blueprint.route('/zimbralistdls', methods=['GET', 'POST'])
 def listdlszimbra():
         r = zm.getAllDistributionLists(name=current_user.email.split("@")[1])
-        print r
-        return render_template("auth/zimbralistdls.tmpl", name=r['GetAllDistributionListsResponse']['dl'][0]['name'],id=r['GetAllDistributionListsResponse']['dl'][1]['id'])
+        if 'dl' in r['GetAllDistributionListsResponse']:
+            print r['GetAllDistributionListsResponse']['dl']
+            return render_template("auth/zimbralistdls.tmpl", data=r['GetAllDistributionListsResponse']['dl'])
+        else:
+            return redirect(url_for('auth.listuserzimbra'))

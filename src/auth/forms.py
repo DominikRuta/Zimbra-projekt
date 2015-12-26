@@ -131,22 +131,25 @@ class RegistrationForm(Form):
         Length(min=6, max=30, message="Please use between 6 and 30 characters"),
         InputRequired(message="You can't leave this empty")
     ])
-
+#Formulář pro nového uživatele
 class NewUserForm(Form):
+    #Kontroluje pole pro email
     email = TextField('E-mailová adresa', validators=[
+        #Funkce ošetří vstupy
         Predicate(safe_characters, message="Použijte pouze číslice a písmena (a-z) bez diaktritiky"),
         Predicate(newUser_email,"Tento mail je již zabraný. Zkuste prosím jiný"),
         Predicate(check_all_aliases,"Tento mail je již zabraný jako alias. Zkuste prosím jiný"),
+        #Podmínka, která upozorní na to, že pole musí být vyplněno
         InputRequired(message="Vyplňte prosím toto pole")
     ])
+    #Kontroluje pole pro jméno
     displayname = TextField('Jméno uživatele', validators=[
-        #Predicate(email_is_available, message="An account has already been reigstered with that email. Try another?"),
-        #Email(message="Please enter a valid email address"),
         InputRequired(message="Vyplňte prosím toto pole")
     ])
+    #Kontroluje pole pro heslo
     password = PasswordField('Heslo', validators=[
-#        EqualTo('confirm', message='Passwords must match'),
         Predicate(safe_characters, message="Použijte pouze číslice a písmena (a-z) bez diaktritiky"),
+        #Podmínka nastavuje minimální a maximální délku hesla
         Length(min=6, max=30, message="Zvolte prosím heslo obsahující 6-30 znaků"),
         InputRequired(message="Vyplňte prosím toto pole")
     ])
