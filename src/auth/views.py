@@ -229,12 +229,8 @@ def edituserzimbra(id):                                 #definování funkce s p
     if form.validate_on_submit():
         #podmínka, ve které upravujeme účet, předáváme ID a nový název
         if zm.modifyAccount(id=id, displayname=form.displayname.data):
-            #cyklus, který nám zjistí, nové jméno
-            for i in r['GetAccountResponse']['account']['a']:
-                if i['n'] == "displayName":
-                    print  i['_content']
             #hláška o úspěšné úpravě
-            flash("Jméno bylo úspěšně změněno na: "+displayname,"info")
+            flash("Jméno bylo úspěšně změněno na: "+ form.displayname.data,"info")
             return redirect(url_for('public.index'))
     #vyvolání šablony a předání dat do šablony
     return render_template("auth/zimbraeditaccount.tmpl", displayName=displayname, form=form, id=id)
