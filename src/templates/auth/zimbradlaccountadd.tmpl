@@ -6,7 +6,7 @@ render_submit %}
     {% block content %}
         {# vložení bočního menu #}
         {% include "shared/side_menu.tmpl" %}
-        <h2 class="header_pages">Seznam uživatelů</h2>
+        <h2 class="header_pages">DL  <span class="span-display-name">{{ name.split("@")[0] }}</span> - přidat uživatele</h2>
             <div class="main_content col-md-9">
             <form method="POST">
                 <table class="table-bordered" >

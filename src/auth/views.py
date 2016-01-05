@@ -321,6 +321,7 @@ def listdlszimbra():
         r = zm.getAllDistributionLists(name=current_user.email.split("@")[1])
         if 'dl' in r['GetAllDistributionListsResponse']:
             r = r['GetAllDistributionListsResponse']['dl']
+            print r
             if type(r) == list:
                 name = None
                 id = None
@@ -337,10 +338,9 @@ def listdlszimbra():
 
 #pridani člena dl
 @login_required
-@blueprint.route('/zimbraadddlmember/<id>', methods=['GET', 'POST'])
+@blueprint.route('/zimbraadddlmember/<id>/<name>', methods=['GET', 'POST'])
 def adddlmemberzimbra(id,name):
         r = zm.getAllAccount()                                              #získání dat ze zimbraadmin.py
-        print name
         if not current_user.email.split("@")[1] == "sspu-opava.local":      #podmínky
             q = zm.getQuotaUsage(domain=current_user.email.split("@")[1])
         else:
@@ -352,4 +352,4 @@ def adddlmemberzimbra(id,name):
         #else:
         #    flash(r)
          #   return redirect(url_for('auth.listdlszimbra'))
-        return render_template("auth/zimbradlaccountadd.tmpl", data=r)
+        return render_template("auth/zimbradlaccountadd.tmpl", data=r,name=name)

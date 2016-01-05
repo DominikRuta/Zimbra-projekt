@@ -41,6 +41,23 @@ def check_domains(domainname):
         if n[1] == domainname:
             return False
     return domainname
+
+def check_dls(distlistname):
+        r = zm.getAllDistributionLists(name=current_user.email.split("@")[1])
+        if 'dl' in r['GetAllDistributionListsResponse']:
+            r = r['GetAllDistributionListsResponse']['dl']
+            if type(r) == list:
+                data = r
+                for n in data:
+                    if n['name'].split("@")[0] == distlistname:
+                        return False
+            else:
+                print r['name']
+                if r['name'].split("@")[0] == distlistname:
+                        return False
+        print distlistname
+        return distlistname
+
 #Kontrola aliasu pri vytvareni noveho
 def check_aliases(alias):
     id=request.path.split("/")[2]
@@ -200,6 +217,9 @@ class DomainForm(Form):
 class DistListForm(Form):
     distlistname = TextField('Zadejte název nového distribučního listu', validators=[
         Predicate(safe_characters, message="Použijte pouze číslice a písmena (a-z) bez diaktritiky"),
+        Predicate(check_dls,message="Tento název je již zabraný. Zkuste prosím jiný"),
+        Predicate(check_all_aliases,message="Tento název je již zabraný jako alias. Zkuste prosím jiný"),
+        Predicate(newUser_email,"Tento název je již zabraný jako mail. Zkuste prosím jiný"),
         Length(min=3, max=20, message="Zvolte prosím název listu obsahující 3-20 znaků"),
         InputRequired(message="Vyplňte prosím toto pole")
     ])
