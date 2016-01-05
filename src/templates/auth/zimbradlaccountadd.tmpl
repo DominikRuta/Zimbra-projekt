@@ -1,0 +1,31 @@
+{% from "macros/fields.tmpl" import render_input_field, render_password_field,
+render_submit %}
+    {# tato stránka je součástí layot.tmpl #}
+    {% extends "shared/layout.tmpl" %}
+    {% block title %}Seznam uživatelů{% endblock %}
+    {% block content %}
+        {# vložení bočního menu #}
+        {% include "shared/side_menu.tmpl" %}
+        <h2 class="header_pages">Seznam uživatelů</h2>
+            <div class="main_content col-md-9">
+            <form method="POST">
+                <table class="table-bordered" >
+                    <thead>
+                    <tr ><th></th><th>Účet</th><th>Jméno</th></tr>
+                    </thead>
+
+                        {# cylkus pro načtení všech uživatelů uložených v proměnné data #}
+                        {% for n in data %}
+                            {% if (n[1].split("@")[1] == current_user.email.split("@")[1] or current_user.email.split("@")[1] == "sspu-opava.local") %}
+                                <tr >
+                                    <td><input type="checkbox" name="dl" value={{ n[1] }}></td>
+                                    <td class="table-account" style="padding: 10px" >{{ n[1] }}</td>
+                                    <td class="table-name">{{ n[2] }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                </table>
+            {{ render_submit("Uložit") }}
+            </form>
+</div>
+{% endblock %}

@@ -336,7 +336,7 @@ class ZimbraManager:
 
     def deleteDistributionList(self, *args, **kwargs):
         distributionlistinfo = self.getDistributionList(*args, **kwargs)
-        if 'GetDistriputionListResponse' in distributionlistinfo:
+        if 'GetDistributionListResponse' in distributionlistinfo:
             response = self.request(
                 'DeleteDistributionListRequest',
                 {
@@ -363,6 +363,19 @@ class ZimbraManager:
         )
         return response
 
+    def addDistributionListMember(self, *args, **kwargs):
+        response = self.request(
+            'AddDistributionListMemberRequest',
+            {
+                "id": kwargs.get('id'),
+                "dlm": kwargs.get('dlm')
+            },
+            "urn:zimbraAdmin"
+        )
+        if 'AddDistributionListMemberResponse' in response:
+            return True
+        else:
+            return False
 
 # zm=ZimbraManager(url=app_config.ZIMBRA_URL,admin=app_config.ZIMBRA_ADMIN,password=app_config.ZIMBRA_ADMIN_PASSWORD)
 zm = ZimbraManager(url="https://192.168.22.110:7071/service/admin/soap", admin="admin", password="Zimbra2015")

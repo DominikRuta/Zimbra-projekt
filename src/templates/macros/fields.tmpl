@@ -71,6 +71,6 @@ a paragraph with any field-related errors beneath the field's control.
   {% endwith %}
 {% endmacro %}
 
-{% macro render_submit(cls="btn btn-info") %}
-    <input type="submit" class="{{ cls }} btn btn-log">
+{% macro render_submit(header) %}
+    <input value={{ header }} type="submit" class="btn btn-info btn-log">
 {% endmacro %}

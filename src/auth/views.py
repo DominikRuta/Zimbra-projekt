@@ -312,10 +312,10 @@ def adddlzimbra():
 @blueprint.route('/zimbradeletedl/<id>', methods=['GET', 'POST'])
 def deletedlzimbra(id):
         r = zm.getDistributionList(id=id)
-        all = zm.getAllDistributionLists(name=current_user.email.split("@")[1])
+        print r
         if zm.deleteDistributionList(id=id):
             flash("Distribuční list " + r['GetDistributionListResponse']['dl']['name'] +" byl úspěšně smazán", "info")
-        return redirect(url_for('auth.listdlszimbra', data = all))
+        return redirect(url_for('auth.listdlszimbra'))
 
 
 #seznam
@@ -324,7 +324,36 @@ def deletedlzimbra(id):
 def listdlszimbra():
         r = zm.getAllDistributionLists(name=current_user.email.split("@")[1])
         if 'dl' in r['GetAllDistributionListsResponse']:
-            print r['GetAllDistributionListsResponse']['dl']
-            return render_template("auth/zimbralistdls.tmpl", data=r['GetAllDistributionListsResponse']['dl'])
+            r = r['GetAllDistributionListsResponse']['dl']
+            if type(r) == list:
+                name = None
+                id = None
+                data = r
+            else:
+                name = r['name']
+                id = r['id']
+                data = None
         else:
-            return redirect(url_for('auth.listuserzimbra'))
+            name = None
+            id = None
+            data = None
+        return render_template("auth/zimbralistdls.tmpl", data=data, name=name, id=id)
+
+#pridani člena dl
+@login_required
+@blueprint.route('/zimbraadddlmember/<id>', methods=['GET', 'POST'])
+def adddlmemberzimbra(id,name):
+        r = zm.getAllAccount()                                              #získání dat ze zimbraadmin.py
+        print name
+        if not current_user.email.split("@")[1] == "sspu-opava.local":      #podmínky
+            q = zm.getQuotaUsage(domain=current_user.email.split("@")[1])
+        else:
+            q = zm.getQuotaUsage(allServers=1)
+        #r = zm.addDistributionListMember(id="d30dff43-38b0-4a32-981d-d748a0b62970", dlm="user@test.cz")
+        #if r:
+        #    flash(r)
+        #    return redirect(url_for('auth.listdlszimbra'))
+        #else:
+        #    flash(r)
+         #   return redirect(url_for('auth.listdlszimbra'))
+        return render_template("auth/zimbradlaccountadd.tmpl", data=r)
