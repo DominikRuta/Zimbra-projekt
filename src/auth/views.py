@@ -176,19 +176,41 @@ def deletedomainzimbra(id):
 @blueprint.route('/zimbraadduser', methods=['GET', 'POST'])     #definování URL podadresy a metod
 def adduserzimbra():                                            #definování funkce bez parametru
     form = NewUserForm()                    #přivolání potřebného formuláře pro novehé uživatele
+    if current_user.email.split("@")[1] == "sspu-opava.local":
+        r = zm.getAllDomain()
+        domains = []
+        for domain in r:
+            domains.append(domain[1])
+        print domains
+        domain_choices = list(enumerate(domains))
+        print domain_choices
+        form.domains.choices = domain_choices
     if form.validate_on_submit():           #podmínka, která zjistí, zda byla akce potvrzena tlačítkem
-        if zm.createAccount(
-                    #získání jména uživatele a připojí k němu doménu formuláře
-                    name=form.email.data+"@"+current_user.email.split("@")[1],
-                    password=form.password.data,       #získání hesla z formuláře
-                    quota=1000,                        #quota je pevně nastavena na 1000 MB
-                    displayname=form.displayname.data, #získání názvu účtu z formuláře
-                    status="active"):                  #status nastaví na aktivní
-            #po úspěšném vytvoření uživatele napíše hlášku
-            flash("Účet " + form.email.data+"@"+current_user.email.split("@")[1] +" byl úspěšně vytvořen", "info")
+       if current_user.email.split("@")[1] == "sspu-opava.local":
+           i = form.domains.data
+           domain = domain_choices[i][1]
+           if zm.createAccount(
+                        #získání jména uživatele a připojí k němu doménu formuláře
+                        name=form.email.data+"@"+domain,
+                        password=form.password.data,       #získání hesla z formuláře
+                        quota=1000,                        #quota je pevně nastavena na 1000 MB
+                        displayname=form.displayname.data, #získání názvu účtu z formuláře
+                        status="active"):                  #status nastaví na aktivní
+                #po úspěšném vytvoření uživatele napíše hlášku
+                flash("Účet " + form.email.data+"@"+ domain +" byl úspěšně vytvořen", "info")
+       else:
+            if zm.createAccount(
+                        #získání jména uživatele a připojí k němu doménu formuláře
+                        name=form.email.data+"@"+current_user.email.split("@")[1],
+                        password=form.password.data,       #získání hesla z formuláře
+                        quota=1000,                        #quota je pevně nastavena na 1000 MB
+                        displayname=form.displayname.data, #získání názvu účtu z formuláře
+                        status="active"):                  #status nastaví na aktivní
+                #po úspěšném vytvoření uživatele napíše hlášku
+                flash("Účet " + form.email.data+"@"+current_user.email.split("@")[1] +" byl úspěšně vytvořen", "info")
 
-            return redirect(url_for('public.index'))    #přesměrování na hlavní stránku (výpis uživatelů)
-    return render_template("auth/zimbraaccountadd.tmpl", form=form) #vyvolání šablony a předání formuláře do šablony
+       return redirect(url_for('public.index'))    #přesměrování na hlavní stránku (výpis uživatelů)
+    return render_template("auth/zimbraaccountadd.tmpl", form=form,domains=r) #vyvolání šablony a předání formuláře do šablony
 
 #smazani uzivatele
 @login_required

@@ -1,5 +1,5 @@
 {% from "macros/fields.tmpl" import render_input_field, render_password_field,
-                                    render_submit %}
+                                    render_submit, render_field %}
 {% extends "shared/layout.tmpl" %}
 
 {% block title %}Nový uživatel{% endblock %}
@@ -12,10 +12,12 @@
         {{ form.hidden_tag() }}
         {# Vykreslí vstupní pole pro email #}
         {{ render_input_field(form.email) }}
+          {{ render_field(form.domains) }}
           {# Vykreslí vstupní pole pro heslo #}
         {{ render_password_field(form.password) }}
           {# Vykreslí vstupní pole pro jméno #}
         {{ render_input_field(form.displayname) }}
+
           {# Vykreslí tlačítko pro potvrzení #}
         {{ render_submit("Vytvořit") }}
       </form>

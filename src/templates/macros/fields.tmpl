@@ -23,6 +23,21 @@ a paragraph with any field-related errors beneath the field's control.
   {% endif %}
 {% endmacro %}
 
+{% macro render_field(field) %}
+
+  <dt>{{ field.label }}
+  <dd>{{ field(**kwargs) }}
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  </dd>
+
+{% endmacro %}
+
 {% macro render_input(name, value, label=None, type="text", disabled=False, readonly=False, errors=None, lc=None, rc=None) %}
   {% if label is not none and type != "hidden" %}
 
@@ -74,3 +89,4 @@ a paragraph with any field-related errors beneath the field's control.
 {% macro render_submit(header) %}
     <input value={{ header }} type="submit" class="btn btn-info btn-log">
 {% endmacro %}
+
