@@ -12,7 +12,11 @@
         {{ form.hidden_tag() }}
         {# Vykreslí vstupní pole pro email #}
         {{ render_input_field(form.email) }}
-          {{ render_field(form.domains) }}
+          {% if current_user.email.split("@")[1] == "sspu-opava.local" %}
+              <div id="select_domain">
+                {{ render_field(form.domains) }}
+              </div>
+          {% endif %}
           {# Vykreslí vstupní pole pro heslo #}
         {{ render_password_field(form.password) }}
           {# Vykreslí vstupní pole pro jméno #}

@@ -18,7 +18,6 @@
                         <tr>
                             <td>{{ name }}</td>
                             <td>{{ id }}</td>
-                            <td ><a href="{{url_for('auth.adddlmemberzimbra',id=id,name=name)}}"><button class="btn btn-success btn-log ">Editovat</button></a></td>
                             <td><a href="{{url_for('auth.deletedlzimbra',id=id)}}"><button class="btn btn-danger btn-log ">Smazat</button></a></td>
                         </tr>
                 {% else %}
@@ -26,7 +25,6 @@
                         <tr>
                             <td>{{ n['name'] }}</td>
                             <td>{{ n['id'] }}</td>
-                            <td ><a href="{{url_for('auth.adddlmemberzimbra',id=n['id'],name=n['name'])}}"><button class="btn btn-success btn-log ">Editovat</button></a></td>
                             <td><a href="{{url_for('auth.deletedlzimbra',id=n['id'])}}"><button class="btn btn-danger btn-log ">Smazat</button></a></td>
                         </tr>
                     {% endfor %}

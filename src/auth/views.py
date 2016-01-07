@@ -210,7 +210,10 @@ def adduserzimbra():                                            #definování fu
                 flash("Účet " + form.email.data+"@"+current_user.email.split("@")[1] +" byl úspěšně vytvořen", "info")
 
        return redirect(url_for('public.index'))    #přesměrování na hlavní stránku (výpis uživatelů)
-    return render_template("auth/zimbraaccountadd.tmpl", form=form,domains=r) #vyvolání šablony a předání formuláře do šablony
+    if current_user.email.split("@")[1] == "sspu-opava.local":
+        return render_template("auth/zimbraaccountadd.tmpl", form=form,domains=r) #vyvolání šablony a předání formuláře do šablony
+    else:
+        return render_template("auth/zimbraaccountadd.tmpl", form=form)
 
 #smazani uzivatele
 @login_required

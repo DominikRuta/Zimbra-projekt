@@ -33,14 +33,6 @@ def safe_characters(s):
         return True
     return re.match(r'^[\w]+$', s) is not None
 
-#def getDomains(request):
- #   r = zm.getAllDomain()
-  #  r = r['GetAllDomainsResponse']['domain']
-    #form = NewUserForm(request.POST, obj=r)
-   # print r
-    #form.domains.choices = [(d['name'].split(".")[0], d['name']) for d in r]
-
-
 #Kontrola domen pri vytvareni nove
 def check_domains(domainname):
     r = zm.getAllDomain()

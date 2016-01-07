@@ -21,9 +21,6 @@
             <h3>Distribuční listy</h3>
                 <a href="{{ url_for('auth.adddlzimbra') }}"><h4 {% if request.path.split("/")[1] == "zimbraadddls" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">Nový DL</h4></a>
                 <a href="{{ url_for('auth.listdlszimbra') }}"><h4 {% if request.path.split("/")[1] == "zimbralistdls" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">Seznam DL</h4></a>
-            {% if request.path.split("/")[1] == "zimbraadddlmember" %}
-                <a href="{{ url_for('auth.listdlszimbra') }}"><h4 {% if request.path.split("/")[1] == "zimbraadddlmember" %} style="background-color: #1785c2; color: white" {% endif %} class="side_menu-link">Přidat uživatele do DL</h4></a>
-            {% endif %}
             {% if request.path.split("/")[1] == "zimbraedituser" or request.path.split("/")[1] == "zimbranewalias"
              or request.path.split("/")[1] == "zimbralistaliases" or request.path.split("/")[1] == "zimbrachangepassword" %}
                 <h3>Heslo</h3>
